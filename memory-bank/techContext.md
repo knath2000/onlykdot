@@ -18,7 +18,7 @@
     *   Integration Helper: `@react-three/fiber` (R3F)
     *   Utilities/Abstractions: `@react-three/drei`
 *   **Animation (Client-Side JS):**
-    *   `react-spring` (Installed via `--legacy-peer-deps` due to React 19) - *Primarily intended for potential physics-based UI animations within R3F/React components.*
+    *   `react-spring` (**Uninstalled** - Caused peer dependency conflict with React 19 and was unused).
     *   Intersection Observer API (via custom `ScrollObserver.astro` component)
     *   Astro View Transitions API (via `<ViewTransitions />` component)
     *   CSS Animations/Transitions (via Tailwind utilities and custom CSS keyframes in `.astro` files or `global.css`)
@@ -46,5 +46,5 @@
 *   `three`, `@types/three`
 *   `@react-three/fiber`
 *   `@react-three/drei`
-*   `react-spring`
+*   `react-spring` (**Uninstalled**)
 *   `@mojs/core`

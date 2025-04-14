@@ -1,4 +1,4 @@
-# Progress: Personal Portfolio Website (as of 2025-04-14 ~11:25 AM PST)
+# Progress: Personal Portfolio Website (as of 2025-04-14 ~11:59 AM PST)
 
 ## 1. What Works / Implemented
 
@@ -45,6 +45,6 @@
 *   **LCP Lazy-Loading (`/projects`):** The current LCP image (`flutter-planner.png`) is incorrectly lazy-loaded, delaying rendering.
 *   **Image Optimization Needed:** Project thumbnails are large and not in optimal formats, significantly impacting load time and payload size.
 *   **CLS (Projects Page):** While mitigated with `min-h`, the root cause (client-side grid rendering) remains. Ensure images have explicit width/height matching aspect ratio.
-*   **Dependency Conflicts:** `react-spring` and `@mojs/core` installed using `--legacy-peer-deps`. Monitor for runtime issues.
+*   **Dependency Conflicts:** `@mojs/core` installed using `--legacy-peer-deps` due to React 19 conflict. Monitor for runtime issues. (`react-spring` was uninstalled as it was unused and caused build failures).
 *   **TypeScript Errors (Editor):** Potential for persistent TS errors on Astro client directives (often a language server limitation). `@mojs/core` lacks official types.
 *   **Filtering Scalability:** Client-side filtering might become slow with many projects.
