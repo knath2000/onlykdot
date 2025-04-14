@@ -2,9 +2,9 @@
 import React, { useRef, useMemo, useState, useEffect, lazy, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Points, PointMaterial, useTexture, Plane, Circle } from '@react-three/drei';
-import mailIcon from '../../assets/textures/mail.png';
-import userIcon from '../../assets/textures/user.png';
-import particleTex from '../../assets/textures/particle.png'; // Import particle texture
+import mailIcon from '../assets/textures/mail.png'; // Corrected path
+import userIcon from '../assets/textures/user.png'; // Corrected path
+import particleTex from '../assets/textures/particle.png'; // Corrected path
 import { Color, NormalBlending } from 'three';
 // import mojs from '@mojs/core'; // REMOVE this import - mojs is handled in the client component
 // import SphereNavButton from './SphereNavButton.jsx'; // Direct import removed for lazy loading
