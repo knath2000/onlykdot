@@ -1,0 +1,45 @@
+---
+// src/components/FeaturedProjects.astro
+// Placeholder for displaying a selection of featured projects
+
+// Import the ProjectCard component (will be created next)
+import ProjectCard from './ProjectCard.astro';
+
+// TODO: Fetch actual featured project data (e.g., from Content Collections)
+const featuredProjects = [
+  { title: "Project Alpha", thumbnail: "/favicon.svg", shortDesc: "A brief description of Project Alpha.", techTags: ["Astro", "Tailwind"], links: { live: "#", repo: "#" } },
+  { title: "Project Beta", thumbnail: "/favicon.svg", shortDesc: "An overview of the goals and tech for Beta.", techTags: ["ThreeJS", "React"], links: { live: "#" } },
+  { title: "Project Gamma", thumbnail: "/favicon.svg", shortDesc: "Highlighting the key features of Gamma.", techTags: ["Node.js", "API"], links: { repo: "#" } },
+];
+---
+{/* Reduced top padding (pt-8), kept bottom padding (pb-16 md:pb-24) */}
+<section id="featured-projects" class="pt-8 pb-16 md:pb-24 bg-base">
+	{/* Wrap content for animation targeting */}
+	<div id="featured-projects-content-wrapper" class="container mx-auto px-4">
+		<h2 class="text-3xl md:text-4xl font-heading font-bold text-center mb-12">Featured Projects</h2>
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+			{featuredProjects.map(project => (
+				<ProjectCard
+					title={project.title}
+					thumbnail={project.thumbnail}
+					shortDesc={project.shortDesc}
+					techTags={project.techTags}
+					links={project.links}
+				/>
+			))}
+		</div>
+	</div> {/* Close content wrapper */}
+		<div class="text-center mt-12 space-x-4">
+			{/* Link to all projects page */}
+			<a href="/projects" class="inline-block px-6 py-3 border border-gray-600 text-secondary font-bold rounded hover:bg-gray-700 hover:text-primary transition-colors">
+				View All Projects
+			</a>
+			{/* Button to reveal next section (About) */}
+			<button id="reveal-about-button" class="inline-block px-6 py-3 bg-accent-green text-base font-bold rounded hover:bg-opacity-80 transition-colors">
+				Next: About Me &darr;
+			</button>
+		</div>
+	</div>
+</section>
+
+{/* Removed animation styles */}

@@ -1,0 +1,67 @@
+---
+// src/components/Hero.astro
+// Placeholder for the Hero section
+
+// Import ThreeJS placeholder/container (will be refined in Step 9)
+import ThreeScene from './ThreeScene.astro';
+// import InteractiveBubbleButton from './InteractiveBubbleButton.astro'; // No longer needed here
+
+interface Props {
+	headline: string;
+	tagline: string;
+}
+
+const { headline, tagline } = Astro.props;
+---
+{/* Added overflow-hidden and animation class */}
+<section class="min-h-screen flex flex-col justify-center items-center text-center relative py-20 overflow-hidden animate-bg-reveal">
+	<ThreeScene /> {/* Render the ThreeJS scene container */}
+	{/* Add ID for animation targeting */}
+	<div id="hero-content-wrapper" class="relative z-10 max-w-3xl mx-auto px-4">
+		{/* Re-add animation classes with different delays */}
+		<h1 class="text-4xl md:text-6xl lg:text-7xl font-heading font-bold mb-4 animate-fade-in-up opacity-0 hero-headline-gradient" style="animation-delay: 0.5s;"> {/* Add gradient class */}
+			{headline}
+		</h1>
+		<p class="text-lg md:text-xl text-secondary mb-8 animate-fade-in-up opacity-0" style="animation-delay: 0.8s;">
+			{tagline}
+		</p>
+		<!-- Interactive Bubble Button is now rendered inside ThreeScene -->
+	</div>
+	{/* Enhanced animation styles */}
+	<style>
+		@keyframes fadeInUp {
+			from { opacity: 0; transform: translateY(30px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+		@keyframes bgReveal { /* Example background animation */
+			from { clip-path: inset(0 100% 0 0); }
+			to { clip-path: inset(0 0 0 0); }
+		}
+		.animate-fade-in-up {
+			animation: fadeInUp 0.8s ease-out forwards;
+		}
+		.animate-bg-reveal {
+			animation: bgReveal 0.6s ease-out forwards;
+			animation-delay: 0.2s; /* Delay background reveal slightly */
+		}
+	       /* Ensure elements start hidden if using animation-fill-mode: forwards */
+	       .opacity-0 { opacity: 0; }
+
+	          /* Gradient text effect */
+	          .hero-headline-gradient {
+	               background: linear-gradient(
+	                   120deg,
+	                   #222 0%,
+	                   #D4AF37 25%, /* Gold */
+	                   #C0C0C0 50%, /* Silver/Chrome */
+	                   #B8860B 75%, /* Darker Gold */
+	                   #111 100%
+	               );
+	               -webkit-background-clip: text;
+	               background-clip: text;
+	               color: transparent;
+	               /* Fallback for browsers that don't support background-clip: text */
+	               /* color: #C0C0C0; */ /* Or a gold color */
+	          }
+	</style>
+</section>

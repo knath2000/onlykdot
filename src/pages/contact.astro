@@ -1,0 +1,39 @@
+---
+// src/pages/contact.astro - Contact Information page
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const pageTitle = "Contact Me";
+const pageDescription = "Get in touch via email or connect on social platforms.";
+
+// TODO: Replace with your actual contact details
+const email = "your.email@example.com";
+const linkedInUrl = "https://linkedin.com/in/your-username";
+const githubUrl = "https://github.com/your-username";
+---
+<BaseLayout title={pageTitle} description={pageDescription}>
+	<div class="max-w-2xl mx-auto py-8 text-center">
+		<h1 class="text-4xl font-heading font-bold mb-8">{pageTitle}</h1>
+
+		<p class="text-lg text-secondary mb-10">
+			I'm currently available for freelance projects and open to discussing new opportunities. Feel free to reach out!
+		</p>
+
+		<div class="space-y-6">
+			<div>
+				<h2 class="text-xl font-semibold mb-2 text-accent-blue">Email</h2>
+				<a href={`mailto:${email}`} class="text-lg hover:underline break-all">{email}</a>
+			</div>
+
+			<div>
+				<h2 class="text-xl font-semibold mb-2 text-accent-green">LinkedIn</h2>
+				<a href={linkedInUrl} target="_blank" rel="noopener noreferrer" class="text-lg hover:underline">Connect on LinkedIn</a>
+			</div>
+
+			<div>
+				<h2 class="text-xl font-semibold mb-2 text-accent-magenta">GitHub</h2>
+				<a href={githubUrl} target="_blank" rel="noopener noreferrer" class="text-lg hover:underline">View My GitHub</a>
+			</div>
+		</div>
+
+	</div>
+</BaseLayout>

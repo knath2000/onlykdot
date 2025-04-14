@@ -1,0 +1,35 @@
+---
+// src/components/SkillsList.astro
+// Placeholder for displaying key skills/technologies
+import SkillsEffectWrapper from './SkillsEffectWrapper.astro'; // Import the effect wrapper
+
+// TODO: Replace with actual skills data
+const skills = [
+	"JavaScript", "TypeScript", "React", "Node.js", "Astro",
+	"Tailwind CSS", "HTML5", "CSS3", "Git", "ThreeJS",
+	"Web Performance", "Accessibility (A11y)"
+];
+---
+{/* Add relative positioning for the absolute wrapper inside */}
+<section class="py-16 md:py-24 bg-base relative overflow-hidden">
+  <SkillsEffectWrapper /> {/* Add the effect wrapper */}
+  {/* Wrap content for animation targeting */}
+  <div id="skills-list-content-wrapper" class="container mx-auto px-4 text-center">
+		<h2 class="text-3xl md:text-4xl font-heading font-bold mb-12">Tech Stack & Skills</h2>
+		<div class="flex flex-wrap justify-center gap-4">
+			{skills.map((skill: string) => (
+				<span class="bg-gray-700/50 text-secondary px-4 py-2 rounded-full text-sm md:text-base hover:bg-accent-yellow/20 hover:text-accent-yellow transition-colors cursor-default">
+					{skill}
+				</span>
+			))}
+		</div>
+		{/* Button to reveal next section (CTA) */}
+		<div class="text-center mt-12">
+			<button id="reveal-cta-button" class="inline-block px-6 py-3 bg-accent-yellow text-base font-bold rounded hover:bg-opacity-80 transition-colors">
+				Next: Get In Touch &darr;
+			</button>
+		</div>
+  </div> {/* Close content wrapper */}
+		</div>
+	</div>
+</section>

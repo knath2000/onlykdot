@@ -1,0 +1,22 @@
+---
+// src/components/ProjectCardHover.astro
+// Astro wrapper to load the R3F hover effect component as an island.
+
+import ProjectCardHoverEffect from './ProjectCardHoverEffect.jsx';
+
+// No props needed from parent for hover state
+// interface Props {
+//     isHovered: boolean;
+// }
+// const { isHovered } = Astro.props;
+---
+{/*
+  This component will be placed inside ProjectCard.astro.
+  'client:hover' loads the component JS when the mouse enters this element's area.
+  We pass the hover state down to the React component.
+*/}
+<div class="absolute inset-0 z-10 pointer-events-auto"> {/* Ensure it can receive pointer events */}
+    {/* Pass no props related to hover state */}
+    {/* Use client:visible instead of the invalid client:hover */}
+    <ProjectCardHoverEffect client:visible />
+</div>

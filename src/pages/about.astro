@@ -1,0 +1,43 @@
+---
+// src/pages/about.astro - About Me page
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const pageTitle = "About Me";
+const pageDescription = "Learn more about my background, experience, and development philosophy.";
+---
+<BaseLayout title={pageTitle} description={pageDescription}>
+	<div class="max-w-3xl mx-auto py-8">
+		<h1 class="text-4xl font-heading font-bold text-center mb-12">{pageTitle}</h1>
+
+		<section class="mb-12 prose prose-invert prose-lg max-w-none">
+			<h2>Background</h2>
+			<p>
+				[Placeholder: Write about your journey into software development. What sparked your interest? What kind of problems do you enjoy solving?]
+			</p>
+			<p>
+				[Placeholder: Mention key experiences, education, or self-learning paths.]
+			</p>
+		</section>
+
+		<section class="mb-12 prose prose-invert prose-lg max-w-none">
+			<h2>Development Philosophy</h2>
+			<p>
+				[Placeholder: Describe your approach to building software. Do you focus on user experience, performance, clean code, specific methodologies? What principles guide your work?]
+			</p>
+		</section>
+
+		<section class="mb-12 prose prose-invert prose-lg max-w-none">
+			<h2>Experience</h2>
+			<p>
+				[Placeholder: Briefly summarize key roles, projects, or accomplishments. You can link to specific projects if desired.]
+			</p>
+			<!-- Optional Resume Link -->
+			<p class="text-center mt-8">
+				<a href="/resume.pdf" download class="inline-block px-6 py-3 border border-accent-yellow text-accent-yellow font-bold rounded hover:bg-accent-yellow hover:text-base transition-colors">
+					Download Resume (PDF)
+				</a>
+				{/* Ensure resume.pdf is placed in the public/ directory */}
+			</p>
+		</section>
+	</div>
+</BaseLayout>

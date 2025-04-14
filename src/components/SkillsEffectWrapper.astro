@@ -1,0 +1,14 @@
+---
+// src/components/SkillsEffectWrapper.astro
+// Loads the SkillsEffect island only when visible.
+
+import SkillsEffect from './SkillsEffect.jsx';
+---
+{/*
+  This wrapper will be placed inside the SkillsList section.
+  'client:visible' ensures the JS/ThreeJS only loads when this div
+  scrolls into view. Needs relative positioning on parent.
+*/}
+<div class="absolute inset-0 z-[-1] overflow-hidden pointer-events-none"> {/* Position behind content */}
+    <SkillsEffect client:visible />
+</div>

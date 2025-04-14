@@ -1,0 +1,24 @@
+# Project Intelligence: Personal Portfolio Website
+
+This file captures key patterns, workflows, and technical notes specific to this project to aid development consistency.
+
+## Content Management (Astro Content Collections)
+
+*   **Adding New Projects:**
+    *   Project data is managed via Markdown files within `src/content/projects/`.
+    *   **Workflow:** To add a project based on external documentation (like Memory Bank files from another project):
+        1.  Place the source documentation files in a temporary directory (e.g., `temp/`).
+        2.  Read the source files (`projectbrief.md`, `productContext.md`, `techContext.md`, etc.) to extract required schema fields (`title`, `shortDesc`, `techStack`, `problemStatement`, etc., defined in `src/content/config.ts`).
+        3.  Gather any missing required information (e.g., `thumbnail` path, `links`) from the user.
+        4.  Create a new `.md` file in `src/content/projects/` (e.g., `new-project-slug.md`).
+        5.  Format the extracted information into the YAML frontmatter of the new file according to the schema.
+        6.  Add a brief summary paragraph below the frontmatter as the main content.
+*   **Previewing New Content:**
+    *   The Astro development server (`npm run dev`) usually picks up new `.md` files in the content collection automatically (or after a server restart).
+    *   **IMPORTANT:** The Astro preview server (`npm run preview`) serves the *last static build*. To see newly added content collection items in the preview server, you **must** run `npm run build` first to generate an updated static site, then run `npm run preview`.
+
+## Documentation
+
+*   **Project Card Analysis:** The analysis of the project card implementation (`ProjectFilters.jsx`, `ProjectCardReact.jsx`) is documented in `docs/PROJECT_CARD_ANALYSIS.md`. This document uses a slightly gamified structure for clarity and engagement.
+
+*(Add more rules and patterns here as they are discovered)*

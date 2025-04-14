@@ -1,0 +1,58 @@
+---
+// src/components/InteractiveBubbleButton.astro
+// Interactive button with bubble visual and burst animation (using mo.js via external script)
+
+// Placeholder label - can be made a prop later if needed
+const label = "View Projects";
+---
+<!-- CRITICAL: Keep the ID for existing reveal script -->
+<button
+    id="reveal-content-button"
+    class="interactive-bubble-button relative inline-flex justify-center items-center rounded-full focus:outline-none focus:ring-2 focus:ring-accent-blue focus:ring-offset-2 focus:ring-offset-background transition-transform duration-200 ease-out hover:scale-110 active:scale-95"
+    aria-label={label}
+    title={label}
+> <!-- Tooltip -->
+    <!-- Bubble visual element - styled with CSS -->
+    <span class="bubble-visual absolute inset-0 rounded-full"></span>
+
+    <!-- Icon container -->
+    <span class="icon-container relative z-10">
+        <!-- Placeholder SVG Icon (Play Arrow) - Replace with desired icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 md:w-8 md:h-8">
+            <path fill-rule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clip-rule="evenodd" />
+        </svg>
+    </span>
+</button>
+
+<style>
+    .interactive-bubble-button {
+        width: 5rem; /* Adjust size as needed */
+        height: 5rem;
+        cursor: pointer;
+        /* Base background, can be overridden by bubble-visual */
+        background-color: var(--color-accent-blue); /* Use theme color */
+        color: var(--color-text-inverse); /* Icon color */
+        border: none;
+        -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+    }
+
+    .bubble-visual {
+        /* Example bubble style with gradient */
+        background: radial-gradient(circle at 70% 30%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 40%, transparent 70%),
+                    linear-gradient(to bottom right, var(--color-accent-blue), var(--color-accent-purple)); /* Use theme colors */
+        /* Add a subtle border maybe? */
+        /* box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.3); */
+        transition: opacity 0.3s ease-out;
+    }
+
+    .icon-container svg {
+       transition: opacity 0.3s ease-out;
+    }
+
+    /* Class added by JS (via external script) to hide button before/during burst */
+    .interactive-bubble-button.hiding .bubble-visual,
+    .interactive-bubble-button.hiding .icon-container {
+        opacity: 0;
+        transition: opacity 0.1s ease-out; /* Quick fade */
+    }
+</style>

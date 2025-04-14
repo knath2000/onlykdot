@@ -1,0 +1,112 @@
+---
+// src/components/ProjectCard.astro
+// Reusable card component for displaying project previews
+
+import ProjectCardHover from './ProjectCardHover.astro';
+interface Link {
+	live?: string;
+	repo?: string;
+}
+
+interface Props {
+	title: string;
+	thumbnail: string;
+	shortDesc: string;
+	techTags?: string[];
+	links?: Link;
+	projectUrl?: string; // URL to the project detail page
+}
+
+const {
+	title,
+	thumbnail,
+	shortDesc,
+	techTags = [],
+	links = {},
+	projectUrl // If provided, the card links to the detail page
+} = Astro.props;
+
+// Determine the wrapper element type and its props based on projectUrl
+const CardWrapper = projectUrl ? 'a' : 'div';
+const cardProps = projectUrl ? { href: projectUrl } : {};
+
+// Classes for the outer wrapper (link or div)
+const outerWrapperClasses = [
+	"block", // Takes up block space
+	"transition-all duration-300 ease-in-out group hover:-translate-y-1", // Group for hover states + lift effect
+	projectUrl ? "cursor-pointer" : "", // Cursor if it's a link
+].filter(Boolean); // Filter out empty strings
+
+// Classes for the new inner wrapper (visual container)
+const innerWrapperClasses = [
+	"border border-gray-700/50 rounded-lg overflow-hidden shadow-lg bg-gray-800/30", // Visual styles
+	"group-hover:border-accent-blue/50 group-hover:shadow-accent-blue/10", // Hover styles based on outer group
+	"h-full flex flex-col", // Ensure it takes full height and uses flex column
+];
+---
+
+<CardWrapper {...cardProps} class:list={outerWrapperClasses}>
+  {/* New Inner Wrapper for visual styling */}
+  <div class:list={innerWrapperClasses}>
+    {/* Add the Hover Effect Component (remains outside visual wrapper if it's an overlay effect) */}
+    <ProjectCardHover />
+	   {/* 1. Title Section */}
+	   <div class="p-4 md:p-6 pb-0"> {/* Remove bottom padding */}
+	       <h3 class="text-lg md:text-xl font-heading font-bold mb-2 group-hover:text-accent-blue transition-colors">
+	           {title}
+	       </h3>
+	   </div>
+
+	   {/* 2. Thumbnail Section */}
+	   <div class="relative aspect-video overflow-hidden"> {/* No extra margins needed */}
+	       <img
+	           src={thumbnail}
+	           alt={`Thumbnail for ${title}`}
+	           class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+	           loading="lazy"
+	       />
+	       {/* Description Overlay */}
+	       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm p-4 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+	           <p class="text-center text-sm text-white">{shortDesc}</p>
+	       </div>
+	   </div>
+
+	   {/* 3. Tags and Links Section */}
+	   <div class="p-4 md:p-6 mt-auto flex flex-col flex-grow"> {/* Pushed to bottom, takes remaining space */}
+	       {techTags.length > 0 && (
+	           <div class="flex flex-wrap gap-2 mb-4">
+	               {techTags.map((tag: string) => (
+	                   <span class="bg-accent-blue/10 text-accent-blue text-xs px-2 py-1 rounded">
+	                       {tag}
+	                   </span>
+	               ))}
+	           </div>
+	       )}
+
+	       {(links.live || links.repo) && (
+	           <div class="mt-auto pt-4 border-t border-gray-700/50 flex gap-4"> {/* mt-auto pushes this part down */}
+	               {links.live && (
+	                   <a
+	                       href={links.live}
+	                       target="_blank"
+	                       rel="noopener noreferrer"
+	                       class="text-accent-green border border-accent-green/50 hover:bg-accent-green/10 px-3 py-1 rounded text-xs font-medium transition-colors duration-200 z-10 relative"
+	                   >
+	                       Live Demo
+	                   </a>
+	               )}
+	               {links.repo && (
+	                   <a
+	                       href={links.repo}
+	                       target="_blank"
+	                       rel="noopener noreferrer"
+	                       class="text-accent-magenta border border-accent-magenta/50 hover:bg-accent-magenta/10 px-3 py-1 rounded text-xs font-medium transition-colors duration-200 z-10 relative"
+	                   >
+	                       GitHub Repo
+	                   </a>
+	               )}
+	           </div>
+	       )}
+	   </div>
+  </div> {/* Close inner wrapper */}
+</CardWrapper>
