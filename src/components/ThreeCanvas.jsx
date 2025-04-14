@@ -1,7 +1,10 @@
 // src/components/ThreeCanvas.jsx
 import React, { useRef, useMemo, useState, useEffect, lazy, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Points, PointMaterial, useTexture, Plane, Circle } from '@react-three/drei'; // Import Plane, Circle
+import { Points, PointMaterial, useTexture, Plane, Circle } from '@react-three/drei';
+import mailIcon from '../../assets/textures/mail.png';
+import userIcon from '../../assets/textures/user.png';
+import particleTex from '../../assets/textures/particle.png'; // Import particle texture
 import { Color, NormalBlending } from 'three';
 // import mojs from '@mojs/core'; // REMOVE this import - mojs is handled in the client component
 // import SphereNavButton from './SphereNavButton.jsx'; // Direct import removed for lazy loading
@@ -32,7 +35,7 @@ function SceneContent() { // Renamed from ParticleSystem
     const rotationalVelocity = useRef({ x: 0, y: 0 });
 
     // Load particle texture
-    const particleTexture = useTexture('/textures/particle.png');
+    const particleTexture = useTexture(particleTex.src); // Use imported texture src
     // useEffect(() => { console.log('Loaded particle texture:', particleTexture); }, [particleTexture]); // Keep console log if needed
 
     // Generate particle data
@@ -193,13 +196,13 @@ function SceneContent() { // Renamed from ParticleSystem
                     position={[0, 0, 2.6]} // Center, slightly forward
                 />
                 <LazySphereNavButton
-                    iconPath="/textures/user.png" // Corrected path
+                    iconPath={userIcon.src} // Use imported image src
                     targetUrl="/about"
                     label="About Me"
                     position={[-0.8, 0, 2.4]} // Left offset
                 />
                 <LazySphereNavButton
-                    iconPath="/textures/mail.png" // Corrected path
+                    iconPath={mailIcon.src} // Use imported image src
                     targetUrl="/contact"
                     label="Contact Me"
                     position={[0.8, 0, 2.4]} // Right offset

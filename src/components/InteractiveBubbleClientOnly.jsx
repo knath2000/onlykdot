@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { Html } from '@react-three/drei';
+import codeBracketsIcon from '../../assets/textures/code-brackets-icon.png'; // Import the image
 // Note: mojs is imported dynamically inside the click handler
 
 // --- Interactive Bubble Component (Client Only) ---
@@ -99,11 +100,11 @@ export default function InteractiveBubbleClientOnly() {
             background: linear-gradient(to right, #F06, #0CF, #FC0, #F06); /* Apply gradient background */
             background-size: 400% 100%; /* For animation */
             animation: icon-gradient-shift 4s linear infinite; /* Apply animation */
-            mask-image: url(/textures/code-brackets-icon.png); /* Use image as mask */
+            mask-image: url(${codeBracketsIcon.src}); /* Use imported image src */
             mask-size: 4.0rem 4.0rem; /* Match increased image size */
             mask-repeat: no-repeat;
             mask-position: center;
-            -webkit-mask-image: url(/textures/code-brackets-icon.png); /* Webkit prefix */
+            -webkit-mask-image: url(${codeBracketsIcon.src}); /* Use imported image src */
             -webkit-mask-size: 4.0rem 4.0rem; /* Match increased image size */
             -webkit-mask-repeat: no-repeat;
             -webkit-mask-position: center;
@@ -156,7 +157,7 @@ export default function InteractiveBubbleClientOnly() {
             >
                 <span className="bubble-visual-3d"></span> {/* Restore bubble visual span */}
                 {/* Use img tag */}
-                <img src="/textures/code-brackets-icon.png" alt="Code Brackets Icon" />
+                <img src={codeBracketsIcon.src} alt="Code Brackets Icon" fetchpriority="high" />
             </button>
         </Html>
     );

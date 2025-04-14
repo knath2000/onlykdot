@@ -1,4 +1,4 @@
-# Progress: Personal Portfolio Website (as of 2025-04-14 ~11:59 AM PST)
+# Progress: Personal Portfolio Website (as of 2025-04-14 ~12:09 PM PST)
 
 ## 1. What Works / Implemented
 
@@ -18,18 +18,23 @@
 *   **React Integration:** `@astrojs/react` installed and configured for Astro Islands.
 *   **Dependencies:** Core dependencies installed.
 *   **Performance Optimization (Homepage):** Achieved Lighthouse Performance score of 100 (Desktop, Production Build).
-*   **Performance Optimization (Projects Page):** Initial fixes implemented (CLS mitigation, heading order). Lighthouse score 92 (Desktop, Production Build). *Further analysis performed.*
+*   **Performance Optimization (Projects Page):** Initial fixes implemented (CLS mitigation, heading order). Lighthouse score 92 (Desktop, Production Build). *Further analysis performed.* Refactored project thumbnails to use Astro Assets.
 *   **Documentation:**
     *   Enhanced `docs/PROJECT_CARD_ANALYSIS.md` with game-like structure.
     *   Created `.clinerules` documenting content workflow and preview build requirement.
+*   **Performance Optimization (Homepage - Deployed):** Lighthouse score 83 (Mobile). Self-hosted fonts, prioritized LCP image, moved textures to `src/assets`.
 
 ## 2. What's Left to Build / Refine
 
+*   **Performance Optimization (Homepage):**
+    *   **(Low Priority):** Reduce unused JS (Lighthouse suggestion).
+    *   **(Low Priority):** Optimize `/textures/particle.png` further (Lighthouse suggestion - consider if needed).
+    *   **(Low Priority):** Properly size `/textures/mail.png` (Lighthouse suggestion).
 *   **Performance Optimization (`/projects` page):**
-    *   **(High Priority):** Fix React hydration error (#418).
-    *   **(High Priority):** Remove `loading="lazy"` from LCP image (`flutter-planner.png`).
-    *   **(High Priority):** Optimize project thumbnail images (resize, compress, WebP/AVIF).
-    *   **(Medium Priority):** Address render-blocking CSS (fonts).
+    *   **(DONE):** Fix React hydration error (#418).
+    *   **(DONE):** Remove `loading="lazy"` from LCP image (`flutter-planner.png`).
+    *   **(DONE):** Optimize project thumbnail images (Refactored to Astro Assets).
+    *   **(DONE):** Address render-blocking CSS (fonts - Self-hosted).
     *   **(Low Priority):** Reduce unused JS.
 *   **Project Filtering:** Implement the client-side logic within `ProjectFilters.jsx`.
 *   **Header & Footer:** Create and integrate shared `Header.astro` and `Footer.astro` components into `BaseLayout.astro`.
@@ -42,9 +47,9 @@
 ## 3. Known Issues / Considerations
 
 *   **React Hydration Error (`/projects`):** Lighthouse reported React error #418, indicating a server/client mismatch during island hydration. Needs investigation.
-*   **LCP Lazy-Loading (`/projects`):** The current LCP image (`flutter-planner.png`) is incorrectly lazy-loaded, delaying rendering.
-*   **Image Optimization Needed:** Project thumbnails are large and not in optimal formats, significantly impacting load time and payload size.
-*   **CLS (Projects Page):** While mitigated with `min-h`, the root cause (client-side grid rendering) remains. Ensure images have explicit width/height matching aspect ratio.
+*   **LCP Lazy-Loading (`/projects`):** (Fixed)
+*   **Image Optimization Needed:** (Partially Addressed) Project thumbnails refactored to Astro Assets. Homepage textures (`particle.png`, `mail.png`) could be further optimized/sized per Lighthouse.
+*   **CLS (Projects Page):** (Fixed) Explicit width/height added.
 *   **Dependency Conflicts:** `@mojs/core` installed using `--legacy-peer-deps` due to React 19 conflict. Monitor for runtime issues. (`react-spring` was uninstalled as it was unused and caused build failures).
 *   **TypeScript Errors (Editor):** Potential for persistent TS errors on Astro client directives (often a language server limitation). `@mojs/core` lacks official types.
 *   **Filtering Scalability:** Client-side filtering might become slow with many projects.

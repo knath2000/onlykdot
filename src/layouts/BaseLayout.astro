@@ -46,11 +46,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 	<meta property="twitter:title" content={title} />
 	<meta property="twitter:description" content={description} />
 	<!-- <meta property="twitter:image" content={new URL('/og-image.png', Astro.site)} /> --> {/* Placeholder OG Image */}
+<!-- Google Font links removed - Fonts are now self-hosted via global.css -->
 
-	<!-- Font Imports (Example: Google Fonts - ensure fonts match tailwind.config) -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Poppins:wght@700&display=swap" rel="stylesheet">
 
 	<!-- Preload LCP Image -->
 	<link rel="preload" href="/textures/code-brackets-icon.png" as="image" type="image/png">

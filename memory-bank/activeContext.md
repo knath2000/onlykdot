@@ -1,23 +1,38 @@
-# Active Context: Personal Portfolio Website (as of 2025-04-14 ~11:25 AM PST)
+# Active Context: Personal Portfolio Website (as of 2025-04-14 ~12:10 PM PST)
 
 ## 1. Current Focus
 
-*   **Performance Optimization (`/projects` page):** Addressing issues identified in Lighthouse report (Score: 85).
-    *   **(High Priority):** Investigate and fix React hydration error (#418).
-    *   **(High Priority):** Optimize LCP image (`flutter-planner.png`) by removing `loading="lazy"`.
-    *   **(High Priority):** Optimize all project thumbnail images (resize, compress, convert to WebP/AVIF).
-    *   **(Medium Priority):** Further mitigate CLS (ensure image dimensions/aspect ratio, monitor `min-h`).
-    *   **(Medium Priority):** Address render-blocking resources (font loading strategy).
+*   **Performance Optimization (Homepage - Deployed):** Addressing issues identified in Lighthouse report (Score: 83).
+    *   **(DONE):** Address render-blocking resources (Self-hosted fonts).
+    *   **(DONE):** Optimize LCP image (`code-brackets-icon.png`) by adding `fetchpriority="high"`.
+    *   **(DONE):** Optimize texture images (`particle.png`, `mail.png`, `user.png`, `code-brackets-icon.png`) by moving to `src/assets` for Astro optimization.
+    *   **(DONE):** Fix Vercel build failure by uninstalling unused `react-spring`.
+    *   **(Low Priority):** Reduce unused JS (Lighthouse suggestion).
+    *   **(Low Priority):** Optimize `/textures/particle.png` further (Lighthouse suggestion).
+    *   **(Low Priority):** Properly size `/textures/mail.png` (Lighthouse suggestion).
+*   **Performance Optimization (`/projects` page):**
+    *   **(DONE):** Fix React hydration error (#418).
+    *   **(DONE):** Optimize LCP image (`flutter-planner.png`) by removing `loading="lazy"`.
+    *   **(DONE):** Optimize project thumbnail images (Refactored to Astro Assets).
+    *   **(DONE):** Further mitigate CLS (Added explicit width/height).
 *   (Next) Implement the client-side project filtering logic (`ProjectFilters.jsx`).
 *   (Next) Create shared Header and Footer components.
 
 ## 2. Recent Changes
 
-*   **Lighthouse Analysis (`/projects` page):**
-    *   Performed Lighthouse analysis (Mobile) on `http://localhost:4321/projects`.
-    *   Overall Scores: Performance 85, Accessibility 100, Best Practices 96, SEO 100.
-    *   Identified key performance issues: LCP (3.4s - lazy-loaded image, large image files), CLS (0.16 - client-side grid render), Render-blocking CSS (fonts), React hydration error (#418).
-    *   Prioritized fixes: Hydration error, LCP optimization (lazy-loading, image optimization), CLS mitigation, Render-blocking resources.
+*   **Lighthouse Analysis (Homepage - Deployed):**
+    *   Performed Lighthouse analysis (Mobile) on `https://onlykdot.vercel.app/`.
+    *   Overall Scores: Performance 83, Accessibility 100, Best Practices 100, SEO 100.
+    *   Identified key performance issues: FCP (3.1s), LCP (3.8s - render delay), Render-blocking CSS (fonts), Unused JS, Image optimization (`particle.png`, `mail.png`).
+*   **Vercel Build Fix:**
+    *   Identified and resolved `react-spring` vs React 19 peer dependency conflict by uninstalling the unused `react-spring` package.
+*   **Performance Optimization (`/projects` page):**
+    *   Refactored project thumbnails to use Astro Assets (`src/assets/project-thumbnails/`).
+    *   Updated content schema (`config.ts`) and project markdown files.
+    *   Updated `ProjectCardReact.jsx` to use image metadata object.
+    *   Fixed React hydration error (#418) by simplifying props passed to `ProjectFilters.jsx`.
+    *   Fixed LCP lazy-loading issue on `/projects`.
+    *   Fixed CLS issue on `/projects` by adding explicit image dimensions.
 *   **Added Project Content:**
     *   Created `src/content/projects/dynamic-sports-tracker.md`.
     *   Created `src/content/projects/quran-adventures.md`.
@@ -50,11 +65,11 @@
 
 ## 3. Next Steps (Potential)
 
-*   **Implement High-Priority Performance Fixes:** Address hydration error, LCP lazy-loading, and image optimization for `/projects` page.
+*   **Implement Homepage Performance Fixes:** Address unused JS and remaining image optimizations identified by Lighthouse.
 *   Implement the client-side project filtering logic in `ProjectFilters.jsx`.
 *   Create shared Header and Footer components and integrate into `BaseLayout.astro`.
 *   Populate remaining content (About text, skills list).
 *   Refine visual styling across all components.
 *   Conduct further performance testing (Lighthouse, profiling) and optimization after fixes.
 *   Conduct thorough accessibility testing (keyboard nav, screen readers, contrast).
-*   Address any remaining known issues (e.g., monitor `react-spring` compatibility).
+*   Address any remaining known issues (e.g., monitor `@mojs/core` compatibility).
