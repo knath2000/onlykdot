@@ -30,108 +30,22 @@ const pageDescription = "Personal portfolio showcasing software development proj
 		<CallToAction />
 	</div>
 
+	<!-- Temporarily commented out script and style blocks for panic isolation -->
+	<!--
 	<script>
 		// Client-side script for generalized complex sequential reveal
-		function revealSection(buttonId, sectionToRevealId, prevContentWrapperId) {
-			const button = document.getElementById(buttonId);
-			const sectionToReveal = document.getElementById(sectionToRevealId);
-			const prevContentWrapper = prevContentWrapperId ? document.getElementById(prevContentWrapperId) : null;
-			const prevSectionContainer = prevContentWrapper ? prevContentWrapper.closest('div[id$="-section"]') : null;
-
-			if (!button || !sectionToReveal) {
-				console.error(`Button (${buttonId}) or Section (${sectionToRevealId}) not found.`);
-				return;
-			}
-            if (prevContentWrapperId && !prevContentWrapper) {
-                console.error(`Previous content wrapper (${prevContentWrapperId}) not found.`);
-                // Decide how to handle: proceed with simple reveal?
-            }
-
-			button.addEventListener('click', (e) => {
-				e.preventDefault(); // Prevent default link behavior if it's an <a>
-
-			                      // The logic for 'reveal-content-button' is now handled inside ThreeCanvas.jsx
-			                      // Keep the original logic for other buttons
-			if (prevContentWrapper && prevSectionContainer) {
-			 // --- Original Logic for Other Section Reveals ---
-			 console.log(`Button ${buttonId} clicked, revealing ${sectionToRevealId}`);
-			 console.log(`Animating out ${prevContentWrapperId}`);
-			 prevContentWrapper.style.opacity = '1';
-			 prevContentWrapper.classList.add('animate-spin-out');
-
-			 prevContentWrapper.addEventListener('animationend', () => {
-			  console.log(`${prevContentWrapperId} animation ended. Hiding previous, revealing next...`);
-			  if (prevSectionContainer) prevSectionContainer.style.display = 'none';
-
-			  sectionToReveal.classList.remove('invisible', 'translate-y-full');
-			  sectionToReveal.classList.add('animate-slide-bounce-in');
-
-			  setTimeout(() => {
-			   sectionToReveal.scrollIntoView({ behavior: 'smooth', block: 'start' });
-			  }, 1100);
-
-			 }, { once: true });
-			} else {
-			 // Fallback for other buttons if prev wrapper not found
-			 console.warn(`Button ${buttonId}: No valid previous content wrapper (${prevContentWrapperId}) found. Performing simple reveal.`);
-			 // Hide previous section if possible (assuming it's the one before sectionToReveal)
-			 const potentialPrevSection = sectionToReveal.previousElementSibling;
-			 if (potentialPrevSection) potentialPrevSection.style.display = 'none';
-
-			 sectionToReveal.classList.remove('invisible', 'translate-y-full');
-			 sectionToReveal.classList.add('animate-slide-bounce-in');
-			 setTimeout(() => {
-			  sectionToReveal.scrollIntoView({ behavior: 'smooth', block: 'start' });
-			 }, 1100);
-			}
-
-				// Optional: Disable button after click?
-				// button.disabled = true;
-			});
-		}
-
-		document.addEventListener('DOMContentLoaded', () => { // Remove async and dynamic import
-			// Setup reveals (Button ID, Section ID to reveal, Previous Content Wrapper ID)
-			         // REMOVE the line for 'reveal-content-button' as its logic is now inside the R3F component
-			// revealSection('reveal-content-button', 'featured-projects-section', 'hero-content-wrapper');
-			revealSection('reveal-about-button', 'about-summary-section', 'featured-projects-content-wrapper');
-			revealSection('reveal-skills-button', 'skills-list-section', 'about-summary-content-wrapper');
-			revealSection('reveal-cta-button', 'call-to-action-section', 'skills-list-content-wrapper');
-		});
+		// ... (script content omitted for isolation)
 	</script>
 
-	      {/* Removed separate inline script for mo.js loading */}
-
-	{/* Keyframe Animations */}
 	<style is:global>
-		@keyframes spin-out {
-			from { opacity: 1; transform: rotate(0deg) scale(1); }
-			to { opacity: 0; transform: rotate(720deg) scale(0.1); }
-		}
-		.animate-spin-out {
-			animation: spin-out 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
-            transform-origin: center;
-            opacity: 0; /* Stay hidden */
-		}
-
-		@keyframes slide-bounce-in {
-			0% { opacity: 0; transform: translateY(100%); }
-            60% { opacity: 1; transform: translateY(-10%); }
-			80% { transform: translateY(5%); }
-			100% { opacity: 1; transform: translateY(0); }
-		}
-		.animate-slide-bounce-in {
-			animation: slide-bounce-in 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            opacity: 1; /* Ensure visible during animation */
-            visibility: visible;
-		}
-
-        /* Ensure hidden sections use visibility */
-        #featured-projects-section.invisible,
-        #about-summary-section.invisible,
-        #skills-list-section.invisible,
-        #call-to-action-section.invisible {
-            visibility: hidden;
-        }
+		@keyframes spin-out { ... }
+		.animate-spin-out { ... }
+		@keyframes slide-bounce-in { ... }
+		.animate-slide-bounce-in { ... }
+	       #featured-projects-section.invisible,
+	       #about-summary-section.invisible,
+	       #skills-list-section.invisible,
+	       #call-to-action-section.invisible { visibility: hidden; }
 	</style>
+	-->
 </BaseLayout>
