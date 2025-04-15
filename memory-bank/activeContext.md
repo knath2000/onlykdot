@@ -1,4 +1,4 @@
-# Active Context: Personal Portfolio Website (as of 2025-04-14 ~12:10 PM PST)
+# Active Context: Personal Portfolio Website (as of 2025-04-14 ~12:26 PM PST)
 
 ## 1. Current Focus
 
@@ -11,10 +11,10 @@
     *   **(Low Priority):** Optimize `/textures/particle.png` further (Lighthouse suggestion).
     *   **(Low Priority):** Properly size `/textures/mail.png` (Lighthouse suggestion).
 *   **Performance Optimization (`/projects` page):**
-    *   **(DONE):** Fix React hydration error (#418).
-    *   **(DONE):** Optimize LCP image (`flutter-planner.png`) by removing `loading="lazy"`.
-    *   **(DONE):** Optimize project thumbnail images (Refactored to Astro Assets).
-    *   **(DONE):** Further mitigate CLS (Added explicit width/height).
+    *   **(Fixed):** Fix React hydration error (#418) by simplifying props passed to client island.
+    *   **(DONE):** Optimize LCP image (`flutter-planner.png`) by removing `loading="lazy"` (Note: LCP image changed, needs re-evaluation).
+    *   **(TODO):** Re-implement project thumbnail image optimization (Temporarily using raw paths).
+    *   **(Fixed):** Further mitigate CLS (Added explicit width/height to React component).
 *   (Next) Implement the client-side project filtering logic (`ProjectFilters.jsx`).
 *   (Next) Create shared Header and Footer components.
 
@@ -30,7 +30,7 @@
     *   Refactored project thumbnails to use Astro Assets (`src/assets/project-thumbnails/`).
     *   Updated content schema (`config.ts`) and project markdown files.
     *   Updated `ProjectCardReact.jsx` to use image metadata object.
-    *   Fixed React hydration error (#418) by simplifying props passed to `ProjectFilters.jsx`.
+    *   Fixed React hydration error (#418) by simplifying props passed to `ProjectFilters.jsx` and adjusting `ProjectCardReact.jsx` to accept string paths.
     *   Fixed LCP lazy-loading issue on `/projects`.
     *   Fixed CLS issue on `/projects` by adding explicit image dimensions.
 *   **Added Project Content:**
@@ -65,6 +65,7 @@
 
 ## 3. Next Steps (Potential)
 
+*   **Re-implement Project Thumbnail Optimization:** Use an API route or alternative method to leverage Astro Assets for project card images.
 *   **Implement Homepage Performance Fixes:** Address unused JS and remaining image optimizations identified by Lighthouse.
 *   Implement the client-side project filtering logic in `ProjectFilters.jsx`.
 *   Create shared Header and Footer components and integrate into `BaseLayout.astro`.

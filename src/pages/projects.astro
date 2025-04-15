@@ -1,65 +1,76 @@
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+// import { getImage, type ImageMetadata } from 'astro:assets'; // Comment out image optimization imports
+import ProjectFilters from '../components/ProjectFilters.jsx';
+
+// Re-add simplified interfaces
+interface SimplifiedProjectData {
+  title: string;
+  thumbnail: string | null; // Keep as string path for now, allow null
+  shortDesc: string;
+  techStack: string[];
+  links: { live?: string; repo?: string };
+  isFeatured: boolean;
+}
+
+interface SimplifiedProjectEntry {
+  slug: string;
+  data: SimplifiedProjectData;
+}
+
 ---
 // src/pages/projects.astro - Page to display all projects
-import BaseLayout from '../layouts/BaseLayout.astro';
-// import ProjectCard from '../components/ProjectCard.astro'; // No longer needed here
-// Placeholder for the interactive filtering component
-import { getCollection } from 'astro:content';
-import ProjectFilters from '../components/ProjectFilters.jsx'; // Import the React component
-
-// Define an interface for better type safety
-interface ProjectData {
-  title: string;
-  thumbnail: string;
-  shortDesc: string;
-  techTags?: string[];
-  links?: { live?: string; repo?: string };
-}
-interface ProjectEntry {
-  slug: string;
-  data: ProjectData;
-}
+// Interfaces moved above the frontmatter block
 
 // Fetch project data from the content collection
-const allProjects = await getCollection('projects');
-
-// Type assertion for safety (optional but good practice)
-// const allProjects: CollectionEntry<'projects'>[] = await getCollection('projects');
+// const allProjects: CollectionEntry<'projects'>[] = await getCollection('projects'); // Comment out data fetching
 
 const pageTitle = "My Projects";
 const pageDescription = "A collection of my software development projects.";
 
-// Preprocess projects to pass only necessary, serializable data to the client island
-// This helps prevent hydration errors, e.g., by excluding Date objects.
-const simplifiedProjects = allProjects.map(project => ({
-  slug: project.slug,
-  data: {
-    title: project.data.title,
-    thumbnail: project.data.thumbnail,
-    shortDesc: project.data.shortDesc,
-    techStack: project.data.techStack || [], // Ensure array exists
-    links: project.data.links || {},       // Ensure object exists
-    isFeatured: project.data.isFeatured || false, // Ensure boolean exists
-    // Exclude: publishDate, problemStatement (if not needed by card/filter)
+// Simplify the project data to pass only serializable fields
+// const simplifiedProjects: SimplifiedProjectEntry[] = allProjects.map(project => ({
+//   slug: project.slug,
+//   data: {
+//     title: project.data.title,
+//     thumbnail: project.data.thumbnail || null, // Pass path string or null
+//     shortDesc: project.data.shortDesc,
+//     techStack: project.data.techStack || [],
+//     links: project.data.links || {},
+//     isFeatured: project.data.isFeatured || false,
+//   }
+// }));
+
+// Define simple hardcoded data for testing
+const testProjects: SimplifiedProjectEntry[] = [
+  {
+    slug: 'test-project-1',
+    data: {
+      title: 'Test Project 1',
+      thumbnail: null, // No image processing for now
+      shortDesc: 'A test description.',
+      techStack: ['Test', 'Astro'],
+      links: {},
+      isFeatured: false,
+    }
+  },
+   {
+    slug: 'test-project-2',
+    data: {
+      title: 'Test Project 2',
+      thumbnail: null,
+      shortDesc: 'Another test description.',
+      techStack: ['React', 'Test'],
+      links: {},
+      isFeatured: true,
+    }
   }
-}));
+];
 ---
 <BaseLayout title={pageTitle} description={pageDescription}>
 	<div class="container mx-auto px-4 py-8">
 		<h1 class="text-4xl font-heading font-bold text-center mb-12">{pageTitle}</h1>
-
-		{/* --- Project Filters and Display --- */}
-		{/*
-		  The ProjectFilters component is a React island (`client:load`).
-		  It receives the full list of projects fetched server-side.
-		  It handles the filtering logic and renders the filtered list client-side.
-		*/}
-		<ProjectFilters client:visible projects={simplifiedProjects} />
-
+		<ProjectFilters client:visible projects={testProjects} /> {/* Pass hardcoded data */}
 		{/* The grid container is now managed within ProjectFilters.jsx */}
-		{/* <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> */}
-			{/* Server-side rendering loop removed */}
-			{/* No projects message is now handled client-side */}
-		{/* </div> */}
-		</div>
 	</div>
 </BaseLayout>

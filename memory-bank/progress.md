@@ -1,4 +1,4 @@
-# Progress: Personal Portfolio Website (as of 2025-04-14 ~12:09 PM PST)
+# Progress: Personal Portfolio Website (as of 2025-04-14 ~12:26 PM PST)
 
 ## 1. What Works / Implemented
 
@@ -31,9 +31,9 @@
     *   **(Low Priority):** Optimize `/textures/particle.png` further (Lighthouse suggestion - consider if needed).
     *   **(Low Priority):** Properly size `/textures/mail.png` (Lighthouse suggestion).
 *   **Performance Optimization (`/projects` page):**
-    *   **(DONE):** Fix React hydration error (#418).
+    *   **(Fixed):** Fix React hydration error (#418) by simplifying props passed to client island.
     *   **(DONE):** Remove `loading="lazy"` from LCP image (`flutter-planner.png`).
-    *   **(DONE):** Optimize project thumbnail images (Refactored to Astro Assets).
+    *   **(TODO):** Re-implement project thumbnail image optimization (Temporarily using raw paths to fix hydration).
     *   **(DONE):** Address render-blocking CSS (fonts - Self-hosted).
     *   **(Low Priority):** Reduce unused JS.
 *   **Project Filtering:** Implement the client-side logic within `ProjectFilters.jsx`.
@@ -46,9 +46,9 @@
 
 ## 3. Known Issues / Considerations
 
-*   **React Hydration Error (`/projects`):** Lighthouse reported React error #418, indicating a server/client mismatch during island hydration. Needs investigation.
+*   **React Hydration Error (`/projects`):** (Fixed) Resolved by simplifying props passed to the client island.
 *   **LCP Lazy-Loading (`/projects`):** (Fixed)
-*   **Image Optimization Needed:** (Partially Addressed) Project thumbnails refactored to Astro Assets. Homepage textures (`particle.png`, `mail.png`) could be further optimized/sized per Lighthouse.
+*   **Image Optimization Needed:** Project thumbnails are currently *not* optimized via Astro Assets (using raw paths to avoid hydration issues). Homepage textures (`particle.png`, `mail.png`) could also be further optimized/sized per Lighthouse.
 *   **CLS (Projects Page):** (Fixed) Explicit width/height added.
 *   **Dependency Conflicts:** `@mojs/core` installed using `--legacy-peer-deps` due to React 19 conflict. Monitor for runtime issues. (`react-spring` was uninstalled as it was unused and caused build failures).
 *   **TypeScript Errors (Editor):** Potential for persistent TS errors on Astro client directives (often a language server limitation). `@mojs/core` lacks official types.

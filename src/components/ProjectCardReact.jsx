@@ -39,11 +39,14 @@ export default function ProjectCardReact({ project }) {
         {/* 2. Thumbnail Section */}
         <div className="relative aspect-video overflow-hidden">
           <img
-            src={thumbnail.src} // Use .src property from Astro Assets image object
+            // Use the thumbnail path string directly. Handle null case.
+            // NOTE: This bypasses Astro's image optimization for now.
+            src={thumbnail ? `/src/assets/project-thumbnails/${thumbnail}` : '/placeholder.png'} // Construct path relative to public or use placeholder
             alt={`Thumbnail for ${title}`}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            width="1600"
-            height="900"
+            // Set explicit width/height for aspect ratio to help CLS, even without full optimization yet
+            width="800"
+            height="450"
           />
           {/* Description Overlay */}
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm p-4 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
