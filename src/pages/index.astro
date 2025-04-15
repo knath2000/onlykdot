@@ -30,15 +30,13 @@ const pageDescription = "Personal portfolio showcasing software development proj
 		<CallToAction />
 	</div>
 
-	<script> // Restore original script tag (remove is:inline)
-	       // import mojs from '@mojs/core'; // No longer needed here
+	<script>
 		// Client-side script for generalized complex sequential reveal
-		function revealSection(buttonId: string, sectionToRevealId: string, prevContentWrapperId: string | null) { // Restore type annotations
+		function revealSection(buttonId, sectionToRevealId, prevContentWrapperId) {
 			const button = document.getElementById(buttonId);
 			const sectionToReveal = document.getElementById(sectionToRevealId);
 			const prevContentWrapper = prevContentWrapperId ? document.getElementById(prevContentWrapperId) : null;
-			         // Find parent section container and assert type
-			         const prevSectionContainer = prevContentWrapper ? prevContentWrapper.closest('div[id$="-section"]') as HTMLElement | null : null; // Restore type assertion
+			const prevSectionContainer = prevContentWrapper ? prevContentWrapper.closest('div[id$="-section"]') : null;
 
 			if (!button || !sectionToReveal) {
 				console.error(`Button (${buttonId}) or Section (${sectionToRevealId}) not found.`);
@@ -54,38 +52,38 @@ const pageDescription = "Personal portfolio showcasing software development proj
 
 			                      // The logic for 'reveal-content-button' is now handled inside ThreeCanvas.jsx
 			                      // Keep the original logic for other buttons
-			             if (prevContentWrapper && prevSectionContainer) {
-			                 // --- Original Logic for Other Section Reveals ---
-			                 console.log(`Button ${buttonId} clicked, revealing ${sectionToRevealId}`);
-			                 console.log(`Animating out ${prevContentWrapperId}`);
-			                 prevContentWrapper.style.opacity = '1';
-			                 prevContentWrapper.classList.add('animate-spin-out');
+			if (prevContentWrapper && prevSectionContainer) {
+			 // --- Original Logic for Other Section Reveals ---
+			 console.log(`Button ${buttonId} clicked, revealing ${sectionToRevealId}`);
+			 console.log(`Animating out ${prevContentWrapperId}`);
+			 prevContentWrapper.style.opacity = '1';
+			 prevContentWrapper.classList.add('animate-spin-out');
 
-			                 prevContentWrapper.addEventListener('animationend', () => {
-			                     console.log(`${prevContentWrapperId} animation ended. Hiding previous, revealing next...`);
-			                     if (prevSectionContainer) prevSectionContainer.style.display = 'none';
+			 prevContentWrapper.addEventListener('animationend', () => {
+			  console.log(`${prevContentWrapperId} animation ended. Hiding previous, revealing next...`);
+			  if (prevSectionContainer) prevSectionContainer.style.display = 'none';
 
-			                     sectionToReveal.classList.remove('invisible', 'translate-y-full');
-			                     sectionToReveal.classList.add('animate-slide-bounce-in');
+			  sectionToReveal.classList.remove('invisible', 'translate-y-full');
+			  sectionToReveal.classList.add('animate-slide-bounce-in');
 
-			                     setTimeout(() => {
-			                         sectionToReveal.scrollIntoView({ behavior: 'smooth', block: 'start' });
-			                     }, 1100);
+			  setTimeout(() => {
+			   sectionToReveal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			  }, 1100);
 
-			                 }, { once: true });
-			             } else {
-			                  // Fallback for other buttons if prev wrapper not found
-			                  console.warn(`Button ${buttonId}: No valid previous content wrapper (${prevContentWrapperId}) found. Performing simple reveal.`);
-			                  // Hide previous section if possible (assuming it's the one before sectionToReveal)
-			                  const potentialPrevSection = sectionToReveal.previousElementSibling as HTMLElement | null; // Restore type assertion
-			                  if (potentialPrevSection) potentialPrevSection.style.display = 'none';
+			 }, { once: true });
+			} else {
+			 // Fallback for other buttons if prev wrapper not found
+			 console.warn(`Button ${buttonId}: No valid previous content wrapper (${prevContentWrapperId}) found. Performing simple reveal.`);
+			 // Hide previous section if possible (assuming it's the one before sectionToReveal)
+			 const potentialPrevSection = sectionToReveal.previousElementSibling;
+			 if (potentialPrevSection) potentialPrevSection.style.display = 'none';
 
-			                  sectionToReveal.classList.remove('invisible', 'translate-y-full');
-			                  sectionToReveal.classList.add('animate-slide-bounce-in');
-			                  setTimeout(() => {
-			                      sectionToReveal.scrollIntoView({ behavior: 'smooth', block: 'start' });
-			                  }, 1100);
-			             }
+			 sectionToReveal.classList.remove('invisible', 'translate-y-full');
+			 sectionToReveal.classList.add('animate-slide-bounce-in');
+			 setTimeout(() => {
+			  sectionToReveal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			 }, 1100);
+			}
 
 				// Optional: Disable button after click?
 				// button.disabled = true;

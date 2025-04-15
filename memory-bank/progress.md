@@ -1,4 +1,4 @@
-# Progress: Personal Portfolio Website (as of 2025-04-14 ~12:26 PM PST)
+# Progress: Personal Portfolio Website (as of 2025-04-15 ~4:30 AM PST)
 
 ## 1. What Works / Implemented
 
@@ -22,19 +22,25 @@
 *   **Documentation:**
     *   Enhanced `docs/PROJECT_CARD_ANALYSIS.md` with game-like structure.
     *   Created `.clinerules` documenting content workflow and preview build requirement.
-*   **Performance Optimization (Homepage - Deployed):** Lighthouse score 83 (Mobile). Self-hosted fonts, prioritized LCP image, moved textures to `src/assets`.
+*   **Performance Optimization (Homepage - Deployed):** Lighthouse score 83 (Mobile).
+    *   Self-hosted fonts in WOFF2 format with `font-display: swap` and preloading
+    *   Prioritized LCP image with `fetchpriority="high"` and preloading
+    *   Moved textures to `src/assets` for Astro optimization
+    *   Configured Vercel compression (Brotli/gzip) and caching headers
+*   **Vercel Deployment:** Successfully deployed after resolving build issues and BaseLayout import problems.
 
 ## 2. What's Left to Build / Refine
 
 *   **Performance Optimization (Homepage):**
-    *   **(Low Priority):** Reduce unused JS (Lighthouse suggestion).
-    *   **(Low Priority):** Optimize `/textures/particle.png` further (Lighthouse suggestion - consider if needed).
-    *   **(Low Priority):** Properly size `/textures/mail.png` (Lighthouse suggestion).
+    *   **(TODO):** Audit 228KB bundle (`extends.CIQnLglx.js`)
+    *   **(TODO):** Implement code splitting and lazy loading
+    *   **(TODO):** Optimize ThreeJS initialization
+    *   **(DONE):** Configured Vercel compression and caching headers
 *   **Performance Optimization (`/projects` page):**
     *   **(Fixed):** Fix React hydration error (#418) by simplifying props passed to client island.
     *   **(DONE):** Remove `loading="lazy"` from LCP image (`flutter-planner.png`).
     *   **(TODO):** Re-implement project thumbnail image optimization (Temporarily using raw paths to fix hydration).
-    *   **(DONE):** Address render-blocking CSS (fonts - Self-hosted).
+    *   **(DONE):** Address render-blocking CSS (fonts - Self-hosted WOFF2 with font-display: swap).
     *   **(Low Priority):** Reduce unused JS.
 *   **Project Filtering:** Implement the client-side logic within `ProjectFilters.jsx`.
 *   **Header & Footer:** Create and integrate shared `Header.astro` and `Footer.astro` components into `BaseLayout.astro`.
