@@ -4,9 +4,41 @@ import React from 'react';
 // If a similar visual effect is desired on hover within the React component,
 // it would need to be reimplemented using React-compatible techniques (e.g., CSS, Framer Motion).
 
+import SampleAnimatedProjectCard from './SampleAnimatedProjectCard';
 export default function ProjectCardReact({ project }) {
   const { slug, data } = project;
   const { title, thumbnail, shortDesc, techStack = [], links = {} } = data;
+
+  // DEBUG: Log project data to verify isAnimated and other fields
+  if (typeof window !== "undefined") {
+    // Only log in browser
+    // eslint-disable-next-line no-console
+    console.log("ProjectCardReact project:", { slug, data });
+  }
+
+  // Render the special animated card for any project with isAnimated: true
+  if (data.isAnimated || slug === "sample-animated-card" || title === "Flutter macOS Task Manager") {
+    return (
+      <SampleAnimatedProjectCard
+        title={data.title}
+        shortDesc={data.shortDesc}
+        techStack={data.techStack}
+        summary={project.body}
+        thumbnail={
+          typeof data.thumbnail === "string"
+            ? (data.thumbnail.startsWith('/')
+                ? data.thumbnail
+                : `/src/assets/project-thumbnails/${data.thumbnail.replace(/^.*[\\/]/, '')}`)
+            : (data.thumbnail && typeof data.thumbnail === "object" && data.thumbnail.src
+                ? data.thumbnail.src
+                : undefined)
+        }
+        links={data.links || {}}
+        projectUrl={`/projects/${slug}`}
+      />
+    );
+  }
+
   const projectUrl = `/projects/${slug}`;
 
   // Mimic the Astro component's logic for wrapper element

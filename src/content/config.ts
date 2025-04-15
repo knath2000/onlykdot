@@ -17,6 +17,7 @@ const projectsCollection = defineCollection({
       repo: z.string().url().optional(), // Optional repository URL
     }).optional(),
     isFeatured: z.boolean().optional().default(false), // Optional flag for featured projects
+    isAnimated: z.boolean().optional().default(false), // Optional flag for animated cards
     // Add any other fields you might need, e.g., client, role
   }),
 });

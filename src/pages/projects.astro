@@ -1,9 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectFilters from '../components/ProjectFilters.jsx';
+import { getCollection } from 'astro:content';
 
 const pageTitle = "Projects – Gameboard";
 const pageDescription = "Explore my software projects in a playful, interactive game-inspired interface.";
+
+// Load all projects from the content collection
+const projects = await getCollection('projects');
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
@@ -15,7 +19,7 @@ const pageDescription = "Explore my software projects in a playful, interactive 
       Select, filter, and explore projects as if you’re choosing your next quest. Each project card is a playable tile with interactive effects and game-like visuals.
     </p>
     <div class="w-full max-w-5xl">
-      <ProjectFilters client:visible />
+      <ProjectFilters client:visible projects={projects} />
     </div>
     <div class="absolute top-0 left-0 w-full h-full pointer-events-none z-[-1]">
       <!-- Game-like background: animated grid, particles, or subtle SVGs -->
