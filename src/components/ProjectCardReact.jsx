@@ -5,7 +5,7 @@ import React from 'react';
 // it would need to be reimplemented using React-compatible techniques (e.g., CSS, Framer Motion).
 
 import SampleAnimatedProjectCard from './SampleAnimatedProjectCard';
-export default function ProjectCardReact({ project }) {
+export default function ProjectCardReact({ project, onOpenModal }) {
   const { slug, data } = project;
   const { title, thumbnail, shortDesc, techStack = [], links = {} } = data;
 
@@ -35,6 +35,7 @@ export default function ProjectCardReact({ project }) {
         }
         links={data.links || {}}
         projectUrl={`/projects/${slug}`}
+        onOpenModal={onOpenModal ? (e) => onOpenModal(e, project) : undefined}
       />
     );
   }
@@ -42,8 +43,10 @@ export default function ProjectCardReact({ project }) {
   const projectUrl = `/projects/${slug}`;
 
   // Mimic the Astro component's logic for wrapper element
-  const CardWrapper = projectUrl ? 'a' : 'div';
-  const cardProps = projectUrl ? { href: projectUrl } : {};
+  const CardWrapper = onOpenModal ? 'div' : 'a';
+  const cardProps = onOpenModal
+      ? { onClick: (e) => onOpenModal(e, project), style: { cursor: 'pointer' } }
+      : projectUrl ? { href: projectUrl } : {};
 
   // Mimic Astro's class:list behavior for conditional classes
   const outerWrapperClasses = [

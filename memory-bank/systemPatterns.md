@@ -10,10 +10,19 @@
 
 *   **Layout Component:** A central `BaseLayout.astro` provides consistent page structure, meta tags, global styles, and View Transitions integration.
 *   **Content Collections:** Project data is managed via Astro Content Collections (`src/content/projects/`), providing type safety and Markdown/MDX processing. Data is fetched using `getCollection('projects')` on relevant pages.
-*   **Initial Navigation (Homepage):** The transition from the Hero section is handled by multiple interactive sphere buttons (`SphereNavButton.jsx` instances rendered via `<Html>` in `ThreeCanvas.jsx`).
-    *   These buttons use `mo.js` for a burst animation on click, followed by direct JavaScript navigation (`window.location.href`) to their respective target URLs.
-    *   Click propagation is stopped using `onPointerDownCapture` on the `<Html>` element and `stopImmediatePropagation` in the handler to prevent conflicts with R3F drag handlers.
-    *   **Hover Effect:** An animated gradient background is applied to the button element on hover, masked by the specific icon image for that button using CSS `mask-image` and a CSS variable (`--icon-url`). The original icon image and bubble visual are hidden via `opacity: 0` during hover.
+*   **Initial Navigation (Homepage - Updated 2025-04-16):**
+    *   The transition from the Hero section is initiated by interactive sphere buttons (`SphereNavButton.jsx` instances rendered via `<Html>` in `ThreeCanvas.jsx`).
+    *   **Centralized Control:** The entire transition sequence (overlays, sphere fade, navigation) is orchestrated by the top-level React island `OverlayManager.jsx`.
+    *   **State Management:** `OverlayManager.jsx` uses state variables (`showMojs`, `showTransition`, `isTransitioning`) to control the visibility and phase of the transition.
+    *   **Trigger:** Clicking a `SphereNavButton` calls a handler prop (`onTransition`) passed down from `OverlayManager.jsx`.
+    *   **Sequence:**
+        1.  `handlePageTransition` in `OverlayManager.jsx` sets `isTransitioning`, `showMojs`, and `showTransition` to `true`.
+        2.  The `MojsBurstOverlay.jsx` and `TransitionOverlay.jsx` components are rendered.
+        3.  The `isTransitioning` prop (true) is passed down to `ThreeCanvas.jsx` -> `SceneContent`.
+        4.  In `SceneContent`, `useFrame` animates the sphere's `<PointMaterial>` opacity to 0.
+        5.  The `isTransitioning` prop is passed to `SphereNavButton` instances, which apply a `.hiding` CSS class to fade out the button visuals.
+        6.  After a `setTimeout` (1300ms), `OverlayManager.jsx` resets all state variables and performs `window.location.href` navigation.
+    *   **Button Hover Effect:** An animated gradient background is applied to the button element on hover, masked by the specific icon image for that button using CSS `mask-image` and a CSS variable (`--icon-url`). The original icon image and bubble visual are hidden via `opacity: 0` during hover.
 *   **Project Card (`ProjectCard.astro`):**
     *   Displays project title, thumbnail, tech tags, and links.
     *   Thumbnail shows short description in an overlay on hover.
@@ -23,10 +32,12 @@
 *   **Sequential Reveal (Post-Hero):** If other sections exist on the homepage after the Hero, a custom JavaScript implementation (`index.astro`) orchestrates complex CSS keyframe animations (`spin-out`, `slide-bounce-in`) to transition between them upon other button clicks.
 *   **Progressive Enhancement:** Core content is accessible without JavaScript. ThreeJS effects and complex animations enhance the experience but are not critical for functionality.
 *   **Utility-First CSS:** Tailwind CSS is used for styling, promoting consistency and rapid development. Custom theme values are defined in `tailwind.config.mjs`.
-*   **Modular ThreeJS:** ThreeJS effects are implemented in separate, isolated React components (`.jsx`) loaded via Astro islands. Examples include the main scene controller (`ThreeCanvas.jsx`), specific effects (`ProjectCardHoverEffect.jsx`, `SkillsEffect.jsx`), and the 3D-integrated UI element (`SphereNavButton.jsx`). Drei helpers (`<Points>`, `<Html>`, etc.) are used extensively.
+*   **Modular ThreeJS:** ThreeJS effects are implemented in separate, isolated React components (`.jsx`) loaded via Astro islands. Examples include the main scene controller (`ThreeCanvas.jsx`), specific effects (`ProjectCardHoverEffect.jsx`, `SkillsEffect.jsx`), and the 3D-integrated UI element (`SphereNavButton.jsx`). Drei helpers (`<Points>`, `<Html>`, etc.) are used extensively. `ThreeCanvas` now receives transition state (`isTransitioning`) via props.
 
 ## 3. Data Flow
 
 *   **Project Data:** Markdown files in `src/content/projects/` -> Astro Content Collections API (`getCollection`) -> Rendered in `projects.astro` and `projects/[slug].astro`.
 *   **Page Content:** Primarily static content within `.astro` components and pages.
-*   **Client-Side State:** Minimal client-side state, primarily managed within individual React components used as Astro Islands (e.g., hover state in `ProjectCardHoverEffect.jsx`, drag state `isDragging` in `ThreeCanvas.jsx`). Filtering state will likely be managed within the `ProjectFilters.jsx` island.
+*   **Client-Side State (Updated 2025-04-16):** Minimal client-side state.
+    *   **Transition State:** Managed in `OverlayManager.jsx` (`showMojs`, `showTransition`, `isTransitioning`).
+    *   **Component State:** Managed within individual React components used as Astro Islands (e.g., hover state in `ProjectCardHoverEffect.jsx`, drag state `isDragging` in `ThreeCanvas.jsx`). Filtering state will likely be managed within the `ProjectFilters.jsx` island.

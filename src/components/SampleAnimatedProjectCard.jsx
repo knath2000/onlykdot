@@ -10,6 +10,7 @@ export default function SampleAnimatedProjectCard({
   thumbnail,
   links = {},
   projectUrl,
+  onOpenModal,
 }) {
   const cardRef = useRef(null);
 
@@ -124,6 +125,36 @@ export default function SampleAnimatedProjectCard({
       </button>
     </div>
   );
+  if (onOpenModal) {
+    return (
+      <div
+        ref={cardRef}
+        className="block"
+        tabIndex={0}
+        aria-label={title || "Animated Project Card"}
+        onClick={(e) => onOpenModal(e)}
+        style={{ textDecoration: "none", cursor: "pointer" }}
+      >
+        <div className="relative">
+          {CardContent}
+          {/* Decorative floating particles */}
+          <div className="absolute -top-6 -left-6 w-8 h-8 bg-pink-400 rounded-full opacity-60 blur-lg animate-float" />
+          <div className="absolute -bottom-8 right-0 w-10 h-10 bg-indigo-400 rounded-full opacity-50 blur-lg animate-float2" />
+          <div className="absolute top-1/2 left-full w-6 h-6 bg-yellow-300 rounded-full opacity-70 blur-md animate-float3" />
+        </div>
+        <style jsx>{`  @keyframes spin-slow { 100% { transform: rotate(360deg); } }
+  .animate-spin-slow { animation: spin-slow 6s linear infinite; }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+  .animate-float { animation: float 3s ease-in-out infinite; }
+  @keyframes float2 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(12px); } }
+  .animate-float2 { animation: float2 4s ease-in-out infinite; }
+  @keyframes float3 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .animate-float3 { animation: float3 2.5s ease-in-out infinite; }
+  .drop-shadow-glow { filter: drop-shadow(0 0 8px #818cf8) drop-shadow(0 0 2px #f472b6); }`}</style>
+      </div>
+    );
+  }
+
 
   return projectUrl ? (
     <a

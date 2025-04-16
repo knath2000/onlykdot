@@ -21,10 +21,10 @@ This website addresses the need for a modern, engaging, and high-performance onl
 
 ## 4. Key Features (from User Perspective)
 
-*   **Splash Introduction / Navigation:** An eye-catching, animated entry point (Hero section with 3D sphere). Interaction proceeds via clicking an interactive bubble button embedded in the sphere, which bursts and navigates to the Projects page.
+*   **Splash Introduction / Navigation (Updated 2025-04-16):** An eye-catching, animated entry point (Hero section with 3D particle sphere). Interaction proceeds via clicking interactive bubble buttons embedded in the sphere. On click, the button triggers a burst animation overlay, while simultaneously the sphere and buttons fade out, before navigating to the target page (e.g., Projects).
 *   **Sequential Section Reveal (Post-Hero):** After the initial Hero section, subsequent homepage sections (if any were planned beyond navigation) would use complex, animated transitions (spin-out/slide-bounce-in) triggered by other buttons.
 *   **Interactive 3D Elements:** Subtle, performant ThreeJS animations (backgrounds, hover effects) enhancing the visual appeal.
-*   **Project Showcase:** Detailed views of individual projects with visuals and technical details.
+*   **Project Showcase:** Detailed views of individual projects with visuals and technical details. (Note: Thumbnails currently missing on detail pages).
 *   **Project Filtering:** Ability to sort/filter projects on the main Projects page.
 *   **Responsive Design:** Adapts to different screen sizes (desktop-first focus).
 *   **Clear Navigation:** Easy access to different sections (Home, Projects, About, Contact).

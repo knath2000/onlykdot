@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion'; // Import motion
 import ProjectCardReact from './ProjectCardReact'; // Import the React card component
+import ProjectDetailModal from './ProjectDetailModal';
 
 export default function ProjectFilters({ projects: allProjects }) { // Only expect 'projects' prop
   // State for filter controls
@@ -10,6 +11,19 @@ export default function ProjectFilters({ projects: allProjects }) { // Only expe
 
   // State for the list of projects to display
   const [filteredProjects, setFilteredProjects] = useState(allProjects || []);
+  // Track selected project and origin rectangle for reveal animation
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [originRect, setOriginRect] = useState(null);
+  const handleOpenModal = (e, project) => {
+    e.preventDefault();
+    const rect = e.currentTarget.getBoundingClientRect();
+    setSelectedProject(project);
+    setOriginRect(rect);
+  };
+  const handleCloseModal = () => {
+    setSelectedProject(null);
+    setOriginRect(null);
+  };
 
   // Effect 1: Extract unique tags from all projects on mount
   useEffect(() => {
@@ -121,6 +135,7 @@ export default function ProjectFilters({ projects: allProjects }) { // Only expe
   };
 
   return (
+    <>
     <div>
       {/* Filter Controls */}
       <div className="mb-8 p-4 bg-gray-800/30 rounded-lg">
@@ -159,7 +174,11 @@ export default function ProjectFilters({ projects: allProjects }) { // Only expe
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
         {filteredProjects.length > 0 ? (
           filteredProjects.map(project => (
-            <ProjectCardReact key={project.slug} project={project} />
+            <ProjectCardReact
+              key={project.slug}
+              project={project}
+              onOpenModal={handleOpenModal}
+            />
           ))
         ) : (
           <p className="text-center text-secondary md:col-span-2 lg:col-span-3">
@@ -168,5 +187,13 @@ export default function ProjectFilters({ projects: allProjects }) { // Only expe
         )}
       </div>
     </div>
-  );
+    {selectedProject && originRect && (
+      <ProjectDetailModal
+        project={selectedProject}
+        originRect={originRect}
+        onClose={handleCloseModal}
+      />
+    )}
+  </>
+);
 }

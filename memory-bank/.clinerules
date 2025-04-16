@@ -19,7 +19,7 @@ This file captures key patterns, workflows, and technical notes specific to this
 
 ## Project Card Patterns
 
-*   **Animated Project Card (2025-04-15):**
+*   **Animated Project Card (2025-04-16):**
     *   All project cards now support dynamic content from Astro Content Collections.
     *   The animated sample card (Flutter macOS Task Manager) demonstrates:
         - Title, shortDesc, techStack, summary, links, thumbnail, and `isAnimated` are all dynamic.
@@ -34,14 +34,41 @@ This file captures key patterns, workflows, and technical notes specific to this
         - Fallback SVG is only shown if the PNG is missing or the import fails.
     *   **Multiple Animated Cards:** The system supports multiple animated cards, each with unique content and slugs, controlled by the `isAnimated` field.
     *   **No Duplicates:** Only one card per project should exist in the content collection.
+*   **Modal Popup Implementation:** Clicking any project card now opens a detailed modal instead of navigating away.
+
 
 ## Technical Notes
 
-*   **Astro + React Islands:** Use Astro for SSG and React islands for interactivity/animation.
-*   **mo.js Integration:** Use dynamic import for mo.js in React components to avoid SSR errors.
+*   **Astro + React Islands:** Use Astro for SSG and React islands for interactivity/animation. Render React components directly as islands (e.g., `<MyReactComponent client:load />`), do not wrap them in intermediate `.astro` components if passing complex props or using client directives like `client:only`.
+*   **mo.js Integration:** Use dynamic import for mo.js in React components to avoid SSR errors. If using with Vite/Astro, prefer loading mo.js via CDN and accessing it via `window.mojs` for compatibility.
+*   **Overlay Management (Working Pattern - 2025-04-16):**
+    *   All DOM-based overlays (mo.js burst, CSS transition animations) must be managed by a top-level React component (`OverlayManager.jsx`) rendered as a React island in the Astro page (`index.astro`).
+    *   This `OverlayManager` component should conditionally render the overlay components (`MojsBurstOverlay.jsx`, `TransitionOverlay.jsx`) based on state.
+    *   The `OverlayManager` should also render the main R3F canvas component (`ThreeCanvas.jsx`) as a sibling to the overlays.
+    *   Overlays should **never** be rendered inside the R3F `<Canvas>` component tree (e.g., from within `ThreeCanvas.jsx` or its children) to avoid the "Div is not part of the THREE namespace" error.
+    *   The `TransitionOverlay.jsx` was refactored from vanilla Three.js to pure DOM/CSS animations to resolve R3F and WebGL context errors.
+*   **Synchronized Transition Fade (Working Pattern - 2025-04-16):**
+    *   To fade out the ThreeJS sphere and its embedded HTML buttons (`SphereNavButton.jsx`) concurrently with the page transition overlays:
+        1.  Centralize transition control in `OverlayManager.jsx`. Add a boolean state `isTransitioning`.
+        2.  Set `isTransitioning` to `true` when the transition starts (`handlePageTransition`) and `false` when the timeout completes (before navigation).
+        3.  Pass `isTransitioning` as a prop down through `ThreeCanvas.jsx` -> `SceneContent` -> `ProjectTransitionButton`/`LazySphereNavButton`.
+        4.  In `SceneContent`, use `useFrame` and `THREE.MathUtils.lerp` to animate the `opacity` of the sphere's `<PointMaterial>` between 1 and 0 based on `isTransitioning` and a fixed duration (e.g., 1.3s).
+        5.  In `SphereNavButton.jsx`, conditionally add a `.hiding` CSS class (which sets `opacity: 0` with a transition) to the button element when `isTransitioning` is `true`.
+*   **Astro/React Prop Passing:** Passing props to Astro islands (e.g., `onPageTransition` to `ThreeScene.astro`) can cause "InvalidComponentArgs" errors. Prefer managing all overlay state and triggers in the React root and only pass minimal props to Astro islands.
 *   **Error Handling:** All image and content fields must be validated for type (string vs. object) before use.
 *   **Accessibility:** All overlays and interactive elements should be accessible and keyboard-navigable.
 *   **Schema Extension:** When adding new fields to project markdown, always update the schema in `src/content/config.ts` to ensure fields are available in the React components.
+
+## Troubleshooting Patterns
+
+*   **R3F "Div is not part of the THREE namespace!" Error:** This occurs if any DOM element (e.g., a `<div>` from a React overlay) is rendered inside the R3F scene graph. Always render overlays at the React root, outside `<Canvas>`. Ensure components rendered *within* the canvas tree do not conditionally render DOM elements (like the `MojsBurstOverlay` was doing in `ProjectTransitionButton`).
+*   **Astro/React Integration:** Inline React components or hooks are not supported in `.astro` files. All React logic must be in `.jsx` files, imported and rendered as React islands. Avoid wrapping React islands in `.astro` components unnecessarily, especially if using `client:only`.
+*   **mo.js + Vite/Astro:** mo.js is not ESM-compatible. Use the CDN and access via `window.mojs` in React components.
+*   **Pointer Events Not Reaching R3F Canvas/Drei Html (Working Pattern - 2025-04-16):**
+    *   **Check Stacking Context:** Ensure parent elements (Astro components like `<section>` in `Hero.astro`, layout wrappers) do not have `pointer-events: none` or a `z-index` that places them above the canvas wrapper without allowing events through. Setting `pointer-events: none` on the Hero section's root element was necessary.
+    *   **Canvas Wrapper:** The `div` directly wrapping the R3F `<Canvas>` in `ThreeCanvas.jsx` needs `pointer-events: auto` and a `z-index` sufficient to place it above non-interactive page content (e.g., `zIndex: 1`).
+    *   **Drei `<Html>`:** Ensure the `<Html>` component in `SphereNavButton.jsx` has `pointerEvents="auto"` and an appropriate `zIndexRange` (e.g., `[100, 0]`) to render above canvas content.
+    *   **`stopPropagation()`:** Removing `onPointerDownCapture` from the `<Html>` component in `SphereNavButton.jsx` was necessary to allow events to reach both the HTML button and the underlying mesh for drag. Be cautious with stopping propagation.
 
 ## Documentation
 

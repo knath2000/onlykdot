@@ -18,7 +18,7 @@ import ThreeCanvas from './ThreeCanvas.jsx';
 	{/* LCP Image rendered directly in Astro for early discovery */}
 	{/* Static LCP image placeholder removed - icons are now rendered within ThreeCanvas */}
 
-	<ThreeCanvas client:visible /> {/* Load when the element enters the viewport */}
+	<ThreeCanvas client:only="react" /> {/* Load when the element enters the viewport */}
 
 	{/* Or use client:visible to load when the element enters the viewport */}
 </div>

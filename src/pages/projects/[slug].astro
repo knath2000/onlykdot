@@ -2,6 +2,7 @@
 // src/pages/projects/[slug].astro - Dynamic page for individual projects
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
 // Import any components needed for rendering project details, e.g., image gallery
 // import ImageGallery from '../../components/ImageGallery.astro';
 
@@ -38,7 +39,13 @@ const pageDescription = project.data.shortDesc || `Details about the ${project.d
 
 		{/* Optional Thumbnail/Hero Image */}
 		{project.data.thumbnail && (
-			<img src={project.data.thumbnail} alt={`${project.data.title} thumbnail`} class="w-full h-auto max-h-[500px] object-cover rounded-lg shadow-lg mb-8" />
+			<Image
+				src={project.data.thumbnail}
+				alt={`${project.data.title} thumbnail`}
+				class="w-full h-auto max-h-[500px] object-cover rounded-lg shadow-lg mb-8"
+				widths={[400, 800, 1200]}
+				sizes="(max-width: 800px) 100vw, 800px"
+			/>
 		)}
 
 		{/* Main Content Sections */}

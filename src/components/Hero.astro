@@ -13,11 +13,11 @@ interface Props {
 
 const { headline, tagline } = Astro.props;
 ---
-{/* Added overflow-hidden and animation class */}
-<section class="min-h-screen flex flex-col justify-center items-center text-center relative py-20 overflow-hidden animate-bg-reveal">
-	<ThreeScene /> {/* Render the ThreeJS scene container */}
+{/* Added overflow-hidden and animation class, and pointer-events: none */}
+<section class="min-h-screen flex flex-col justify-center items-center text-center relative py-20 overflow-hidden animate-bg-reveal" style="pointer-events: none;">
+	{/* <ThreeScene /> Render the ThreeJS scene container - removed to prevent duplicate sphere */}
 	{/* Add ID for animation targeting */}
-	<div id="hero-content-wrapper" class="relative z-10 max-w-3xl mx-auto px-4">
+	<div id="hero-content-wrapper" class="relative max-w-3xl mx-auto px-4"> {/* Removed z-10 */}
 		{/* Re-add animation classes with different delays */}
 		<h1 class="text-4xl md:text-6xl lg:text-7xl font-heading font-bold mb-4 animate-fade-in-up opacity-0 hero-headline-gradient" style="animation-delay: 0.5s;"> {/* Add gradient class */}
 			{headline}

@@ -19,7 +19,7 @@ const projects = await getCollection('projects');
       Select, filter, and explore projects as if you’re choosing your next quest. Each project card is a playable tile with interactive effects and game-like visuals.
     </p>
     <div class="w-full max-w-5xl">
-      <ProjectFilters client:visible projects={projects} />
+      <ProjectFilters client:only="react" projects={projects} />
     </div>
     <div class="absolute top-0 left-0 w-full h-full pointer-events-none z-[-1]">
       <!-- Game-like background: animated grid, particles, or subtle SVGs -->

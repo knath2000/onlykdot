@@ -1,16 +1,20 @@
 ---
-// src/pages/index.astro - Homepage Structure with Generalized Complex Splash Transitions
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import FeaturedProjects from '../components/FeaturedProjects.astro';
 import AboutSummary from '../components/AboutSummary.astro';
 import SkillsList from '../components/SkillsList.astro';
 import CallToAction from '../components/CallToAction.astro';
+import OverlayManager from '../components/OverlayManager.jsx';
 
 const pageTitle = "Kalyan Nath - Creative Developer";
 const pageDescription = "Personal portfolio showcasing software development projects and technical skills.";
 ---
+
 <BaseLayout title={pageTitle} description={pageDescription}>
+	<!-- Overlay state and logic at the Astro page level -->
+	<OverlayManager client:only="react" />
+
 	{/* Splash Section */}
 	<div id="hero-section-container">
 		<Hero headline={pageTitle} tagline="Building engaging digital experiences." />
@@ -20,32 +24,13 @@ const pageDescription = "Personal portfolio showcasing software development proj
 	<div id="featured-projects-section" class="relative invisible opacity-0 translate-y-full">
 		<FeaturedProjects />
 	</div>
-	<div id="about-summary-section" class="relative invisible opacity-0 translate-y-full"> {/* Added relative + translate */}
+	<div id="about-summary-section" class="relative invisible opacity-0 translate-y-full">
 		<AboutSummary />
 	</div>
-	<div id="skills-list-section" class="relative invisible opacity-0 translate-y-full"> {/* Added relative + translate */}
+	<div id="skills-list-section" class="relative invisible opacity-0 translate-y-full">
 		<SkillsList />
 	</div>
-	<div id="call-to-action-section" class="relative invisible opacity-0 translate-y-full"> {/* Added relative + translate */}
+	<div id="call-to-action-section" class="relative invisible opacity-0 translate-y-full">
 		<CallToAction />
 	</div>
-
-	<!-- Temporarily commented out script and style blocks for panic isolation -->
-	<!--
-	<script>
-		// Client-side script for generalized complex sequential reveal
-		// ... (script content omitted for isolation)
-	</script>
-
-	<style is:global>
-		@keyframes spin-out { ... }
-		.animate-spin-out { ... }
-		@keyframes slide-bounce-in { ... }
-		.animate-slide-bounce-in { ... }
-	       #featured-projects-section.invisible,
-	       #about-summary-section.invisible,
-	       #skills-list-section.invisible,
-	       #call-to-action-section.invisible { visibility: hidden; }
-	</style>
-	-->
 </BaseLayout>

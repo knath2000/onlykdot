@@ -1,5 +1,7 @@
 // src/components/ThreeCanvas.jsx
 import React, { useRef, useMemo, useState, useEffect, lazy, Suspense } from 'react';
+import TransitionOverlay from './TransitionOverlay.jsx';
+import MojsBurstOverlay from './MojsBurstOverlay.jsx';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Points, PointMaterial, useTexture, Plane, Circle } from '@react-three/drei';
 import mailIcon from '../assets/textures/mail.png'; // Corrected path
@@ -9,6 +11,7 @@ import { Color, NormalBlending } from 'three';
 // import mojs from '@mojs/core'; // REMOVE this import - mojs is handled in the client component
 // import SphereNavButton from './SphereNavButton.jsx'; // Direct import removed for lazy loading
 const LazySphereNavButton = lazy(() => import('./SphereNavButton.jsx')); // Lazy load the button
+import ProjectTransitionButton from './ProjectTransitionButton.jsx'; // Import the transition wrapper
 
 // --- Configuration ---
 const particleCount = 5000;
@@ -20,11 +23,9 @@ const dragSensitivity = 0.005;
 const dampingFactor = 0.95;
 const velocityThreshold = 0.0001;
 
-// --- InteractiveBubble3D component removed, logic moved to InteractiveBubbleClientOnly.jsx ---
-
-
+import { MathUtils } from 'three';
 // --- Main Scene Content Component ---
-function SceneContent() { // Renamed from ParticleSystem
+function SceneContent({ handleTransition, isTransitioning }) { // Accept handler and transition state as props
     const groupRef = useRef(); // Ref for the parent group (particles + button)
     const { size, viewport } = useThree();
     const aspect = size.width / viewport.width;
@@ -36,11 +37,9 @@ function SceneContent() { // Renamed from ParticleSystem
 
     // Load particle texture
     const particleTexture = useTexture(particleTex.src); // Use imported texture src
-    // useEffect(() => { console.log('Loaded particle texture:', particleTexture); }, [particleTexture]); // Keep console log if needed
 
     // Generate particle data
     const particlesData = useMemo(() => {
-        // ... (particle generation logic remains the same) ...
         const positions = new Float32Array(particleCount * 3);
         const colors = new Float32Array(particleCount * 3);
         const sizes = new Float32Array(particleCount);
@@ -61,80 +60,75 @@ function SceneContent() { // Renamed from ParticleSystem
 
     // --- Event Handlers (Attached to the group) ---
     const handlePointerDown = (event) => {
-        // Remove the target vs currentTarget check, as it was incorrectly blocking drags
-        // if (event.target !== event.currentTarget) {
-        //      console.log("PointerDown ignored, target !== currentTarget");
-        //      return;
-        // }
         if (!enableInteractivity) return;
-        console.log("PointerDown: Starting drag");
         event.stopPropagation();
         setIsDragging(true);
         previousPointerPos.current = { x: event.clientX, y: event.clientY };
         rotationalVelocity.current = { x: 0, y: 0 };
-        (event.target).setPointerCapture(event.pointerId); // Capture on the group
-         // Set cursor on body for better UX during drag
+        (event.target).setPointerCapture(event.pointerId);
         document.body.style.cursor = 'grabbing';
     };
 
     const handlePointerUp = (event) => {
         if (!enableInteractivity || !isDragging) return;
-        console.log("PointerUp: Stopping drag");
         event.stopPropagation();
         setIsDragging(false);
-        // Check if target still exists before releasing capture
         if (event.target.hasPointerCapture(event.pointerId)) {
             (event.target).releasePointerCapture(event.pointerId);
         }
         document.body.style.cursor = 'default';
     };
 
-     const handlePointerLeave = (event) => {
-        // Only stop drag if leaving the canvas while dragging
+    const handlePointerLeave = (event) => {
         if (isDragging) {
-             console.log("PointerLeave: Stopping drag (if active)");
-             event.stopPropagation();
-             setIsDragging(false);
-             if (event.target.hasPointerCapture(event.pointerId)) {
+            event.stopPropagation();
+            setIsDragging(false);
+            if (event.target.hasPointerCapture(event.pointerId)) {
                 (event.target).releasePointerCapture(event.pointerId);
-             }
-             document.body.style.cursor = 'default';
+            }
+            document.body.style.cursor = 'default';
         }
     };
 
     const handlePointerMove = (event) => {
         if (!enableInteractivity) return;
-        // Only process move if dragging
         if (!isDragging) return;
-
-        console.log("PointerMove: Dragging...");
         event.stopPropagation();
 
         const dx = event.clientX - previousPointerPos.current.x;
         const dy = event.clientY - previousPointerPos.current.y;
 
-        if (groupRef.current) { // Rotate the group
-            // Correct mapping: dx affects Y rotation, dy affects X rotation
-            // Invert dy for more natural up/down drag feel
+        if (groupRef.current) {
             groupRef.current.rotation.y += dx * dragSensitivity;
-            groupRef.current.rotation.x += dy * dragSensitivity; // Remove inversion
+            groupRef.current.rotation.x += dy * dragSensitivity;
         }
 
-        // Update velocity correctly based on applied rotation
-        rotationalVelocity.current.x = dy * dragSensitivity; // Remove inversion
+        rotationalVelocity.current.x = dy * dragSensitivity;
         rotationalVelocity.current.y = dx * dragSensitivity;
 
         previousPointerPos.current = { x: event.clientX, y: event.clientY };
     };
 
-    // Animation loop (applies to the group)
+    // --- Sphere Fade Animation ---
+    const pointMaterialRef = useRef();
+
+    // For button fade: collect refs for all nav buttons
+    const navButtonRefs = useRef([]);
+
+    // Animation loop (applies to the group and handles fade)
+    // Fade duration in seconds
+    const FADE_DURATION = 1.3; // 1300ms
+
+    // Track fade progress
+    const fadeProgress = useRef(0);
+
     useFrame((state, delta) => {
         if (!groupRef.current) return;
 
+        // Sphere rotation logic
         if (isDragging) {
             // Rotation handled in move handler
         } else if (Math.abs(rotationalVelocity.current.x) > velocityThreshold || Math.abs(rotationalVelocity.current.y) > velocityThreshold) {
-            // Apply damping
             groupRef.current.rotation.x += rotationalVelocity.current.x;
             groupRef.current.rotation.y += rotationalVelocity.current.y;
             rotationalVelocity.current.x *= dampingFactor;
@@ -142,39 +136,49 @@ function SceneContent() { // Renamed from ParticleSystem
             if (Math.abs(rotationalVelocity.current.x) <= velocityThreshold) rotationalVelocity.current.x = 0;
             if (Math.abs(rotationalVelocity.current.y) <= velocityThreshold) rotationalVelocity.current.y = 0;
         } else {
-            // Apply incremental auto-rotation
             const autoRotateSpeedY = 0.05;
             const autoRotateSpeedX = 0.02;
             groupRef.current.rotation.y += delta * autoRotateSpeedY;
             groupRef.current.rotation.x += delta * autoRotateSpeedX;
         }
+
+        // --- Fade logic for sphere and nav buttons ---
+        if (pointMaterialRef.current) {
+            if (isTransitioning) {
+                fadeProgress.current = Math.min(fadeProgress.current + delta / FADE_DURATION, 1);
+            } else {
+                fadeProgress.current = Math.max(fadeProgress.current - delta / 0.2, 0); // quick reset
+            }
+            const opacity = MathUtils.lerp(1, 0, fadeProgress.current);
+            pointMaterialRef.current.opacity = opacity;
+        }
+        // Nav button fade handled via prop/class, not here
     });
 
     return (
         // Group containing particles and HTML button, handles drag rotation
         <group
             ref={groupRef}
-            // Event handlers moved to the invisible mesh below
         >
             {/* Invisible sphere for capturing drag events reliably */}
             <mesh
-                visible={false} // Make it invisible
+                visible={false}
                 onPointerDown={handlePointerDown}
                 onPointerUp={handlePointerUp}
                 onPointerLeave={handlePointerLeave}
                 onPointerMove={handlePointerMove}
             >
-                <sphereGeometry args={[sphereRadius + 0.2, 32, 32]} /> {/* Slightly larger */}
+                <sphereGeometry args={[sphereRadius + 0.2, 32, 32]} />
                 <meshBasicMaterial transparent opacity={0} depthWrite={false} />
             </mesh>
             <Points
-                // Event handlers are now on the invisible mesh, not the group
                 positions={particlesData.positions}
                 colors={particlesData.colors}
                 sizes={particlesData.sizes}
                 stride={3}
             >
                 <PointMaterial
+                    ref={pointMaterialRef}
                     transparent
                     vertexColors
                     size={0.1}
@@ -187,54 +191,54 @@ function SceneContent() { // Renamed from ParticleSystem
                 />
             </Points>
             {/* Bubble Button 3D Implementation */}
-            {/* Wrap lazy-loaded buttons in Suspense */}
-            <Suspense fallback={null}> {/* Or provide a simple placeholder mesh */}
-                <LazySphereNavButton
+            <Suspense fallback={null}>
+                <ProjectTransitionButton
                     iconPath="/textures/code-brackets-icon.png"
                     targetUrl="/projects"
                     label="View Projects"
-                    position={[0, 0, 2.6]} // Center, slightly forward
+                    position={[0, 0, 2.6]}
+                    onTransition={handleTransition}
+                    isTransitioning={isTransitioning}
                 />
                 <LazySphereNavButton
-                    iconPath={userIcon.src} // Use imported image src
+                    iconPath={userIcon.src}
                     targetUrl="/about"
                     label="About Me"
-                    position={[-0.8, 0, 2.4]} // Left offset
+                    position={[-0.8, 0, 2.4]}
+                    isTransitioning={isTransitioning}
                 />
                 <LazySphereNavButton
-                    iconPath={mailIcon.src} // Use imported image src
+                    iconPath={mailIcon.src}
                     targetUrl="/contact"
                     label="Contact Me"
-                    position={[0.8, 0, 2.4]} // Right offset
+                    position={[0.8, 0, 2.4]}
+                    isTransitioning={isTransitioning}
                 />
             </Suspense>
         </group>
     );
 }
 
-// --- BubbleButton3D Component Removed ---
-// The logic is now entirely within InteractiveBubbleClientOnly.jsx
-
-// --- Main Canvas Component ---
-export default function ThreeCanvas() {
-    // console.log("ThreeCanvas (R3F): Initializing..."); // Keep if needed
+/**
+ * ThreeCanvas now receives handleTransition and isTransitioning as props from OverlayManager.
+ * It no longer manages overlay state or navigation.
+ */
+export default function ThreeCanvas({ handleTransition, isTransitioning }) {
     return (
         <div
-            // aria-hidden="true" removed to allow focus on interactive elements within
             style={{
                 position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                zIndex: -1,
-                pointerEvents: 'none' // Container doesn't need events
+                zIndex: 1,
+                pointerEvents: 'auto'
             }}
         >
             <Canvas
                 camera={{ position: [0, 0, 4], fov: 75 }}
                 style={{ background: 'transparent' }}
                 onCreated={({ gl }) => { gl.setPixelRatio(Math.min(window.devicePixelRatio, 2)); }}
-                // Let R3F handle pointer events on its elements within the canvas
             >
                 <ambientLight intensity={0.8} />
-                <SceneContent /> {/* Renamed from ParticleSystem */}
+                <SceneContent handleTransition={handleTransition} isTransitioning={isTransitioning} />
             </Canvas>
         </div>
     );

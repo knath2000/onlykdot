@@ -19,6 +19,7 @@
     "@types/three": "^0.175.0",
     "astro": "^5.7.0",
     "framer-motion": "^12.7.2",
+    "mo-js": "^0.288.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "three": "^0.175.0"

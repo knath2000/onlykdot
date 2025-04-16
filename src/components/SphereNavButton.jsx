@@ -3,42 +3,30 @@ import { Html } from '@react-three/drei';
 // Note: Click animation is handled via CSS (.bursting class)
 
 // --- Reusable Sphere Navigation Button Component ---
-export default function SphereNavButton({ iconPath, targetUrl, label, position }) {
+// Removed onClick prop temporarily, will be passed from wrapper
+export default function SphereNavButton({ iconPath, targetUrl, label, position, onClick, isTransitioning }) {
     const buttonRef = useRef(); // Ref for the actual button element inside Html
 
-    const handleBubbleClick = (event) => {
+    // Simplified click handler - just calls the passed onClick prop
+    const handleInternalClick = (event) => {
         // Stop propagation *aggressively* to prevent R3F drag events
         event.stopPropagation();
         if (event.nativeEvent && typeof event.nativeEvent.stopImmediatePropagation === 'function') {
             event.nativeEvent.stopImmediatePropagation();
         }
-        const buttonElement = buttonRef.current;
-        if (!buttonElement) return;
-
-        console.log(`Sphere button "${label}" clicked, applying CSS burst and navigating...`);
-
-        // Add burst animation class
-        buttonElement.classList.add('bursting');
-
-        // Set timeout for navigation (match animation duration)
-        setTimeout(() => {
-            console.log(`CSS Burst animation likely complete, navigating to ${targetUrl}`);
-            window.location.href = targetUrl; // Use targetUrl prop
-            // Also remove the bursting class after the animation duration
-            // This helps if the page is restored from bfcache
-            if (buttonElement) {
-                buttonElement.classList.remove('bursting');
-            }
-        }, 500); // Match animation duration
+        // Call the onClick passed from the parent/wrapper component
+        if (onClick) {
+            onClick(event, buttonRef.current); // Pass event and button element
+        }
     };
 
     // CSS for the button embedded within the Html component
     // Using a unique class name based on label to avoid potential style conflicts if needed,
     // but primarily relying on inline style for the mask URL.
-    const buttonClassName = `interactive-bubble-button-3d`; // Keep class generic for now
+    const buttonClassName = `interactive-bubble-button-3d${isTransitioning ? " hiding" : ""}`; // Add hiding class if transitioning
 
     const bubbleStyle = `
-        .${buttonClassName} {
+        .interactive-bubble-button-3d {
             width: 5rem; height: 5rem; cursor: pointer; /* Increased size */
             background-color: var(--color-accent-blue); /* Restore original */
             color: var(--color-text-inverse); /* Restore original */
@@ -49,8 +37,8 @@ export default function SphereNavButton({ iconPath, targetUrl, label, position }
             pointer-events: auto;
             overflow: visible; /* Explicitly allow overflow */
         }
-        .${buttonClassName}:hover { transform: scale(1.1); }
-        .${buttonClassName}:active { transform: scale(0.95); }
+        .interactive-bubble-button-3d:hover { transform: scale(1.1); }
+        .interactive-bubble-button-3d:active { transform: scale(0.95); }
 
         .${buttonClassName} .bubble-visual-3d { /* Target child span */
             position: absolute; inset: 0; border-radius: 50%;
@@ -141,12 +129,14 @@ export default function SphereNavButton({ iconPath, targetUrl, label, position }
     `;
 
     return (
+        // Removed Fragment and conditional overlay rendering
         <Html
             position={position} // Use position prop
             center
-            zIndexRange={[10, 0]}
-            // Stop pointer events here to prevent interference with R3F drag handlers
-            onPointerDownCapture={(e) => e.stopPropagation()} // Use capture phase
+            zIndexRange={[100, 0]}
+            pointerEvents="auto"
+            // Stop pointer events here to prevent interference with R3F drag handlers - REMOVED
+            // onPointerDownCapture={(e) => e.stopPropagation()} // Use capture phase
         >
             <style>{bubbleStyle}</style>
             <button
@@ -155,7 +145,7 @@ export default function SphereNavButton({ iconPath, targetUrl, label, position }
                 className={buttonClassName}
                 aria-label={label} // Use label prop
                 title={label} // Use label prop
-                onClick={handleBubbleClick}
+                onClick={handleInternalClick} // Use internal handler
                 // Set CSS variable for the mask URL
                 style={{ '--icon-url': `url(${iconPath})` }}
             >
@@ -163,6 +153,7 @@ export default function SphereNavButton({ iconPath, targetUrl, label, position }
                 <img src={iconPath} alt={label} />
                 {/* img tag removed to decouple LCP image loading */}
             </button>
-        </Html>
+            </Html>
+        // Removed Fragment closing tag
     );
 }

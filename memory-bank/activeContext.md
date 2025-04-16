@@ -1,34 +1,35 @@
-# Active Context: Personal Portfolio Website (as of 2025-04-15)
+# Active Context: Personal Portfolio Website (as of 2025-04-16 @ 8:01 AM)
 
 ## 1. Current Focus
 
-- **Animated Project Card System:** The projects splash page now features a highly animated, interactive project card for the "Flutter macOS Task Manager" (planner app), using Astro Content Collections and React islands.
-- **Multiple Animated Cards:** The system now supports multiple animated project cards. Any project with `isAnimated: true` in its frontmatter will render as an animated card.
-- **Astro Image Pipeline Integration:** The card's thumbnail is now handled via Astro's image() helper, using a relative path (../../assets/project-thumbnails/flutter-planner.png) and rendered as an Astro image object in React.
-- **Dynamic Card Content:** All card content (title, shortDesc, techStack, summary, links, thumbnail, isAnimated) is dynamically loaded from the markdown file.
-- **Card Layout Update:** The card layout is now:
-  - Title
-  - Short description
-  - Thumbnail (rounded rectangle, below shortDesc, above tech stack)
-  - Tech stack badges
-  - Live/Repo links
-  - "See Animation" button
-- **Summary Overlay:** On hover, the summary overlays the thumbnail with a semi-transparent, rounded rectangle.
-- **No Duplicates:** The original non-animated planner card was removed to prevent duplicates.
-- **Error Handling:** All previous issues with missing images, fallback SVGs, and Astro image pipeline errors have been resolved.
-- **Schema Update:** The Astro content schema now includes `isAnimated` as a boolean field, enabling robust support for animated cards.
+- **Project Detail Page Thumbnails:** Investigating and fixing the issue where project thumbnails are not displaying on the individual project detail pages (`/projects/[slug]`).
+- **Font Loading:** Addressing the 404 errors for self-hosted fonts.
 
 ## 2. Recent Changes
 
-- Refactored SampleAnimatedProjectCard.jsx and ProjectCardReact.jsx to support Astro image objects and dynamic content.
-- Updated sample-animated-card.md and animated-card-copy.md to use the correct relative path for the thumbnail and include `isAnimated: true`.
-- Removed flutter-task-manager.md, quran-adventures.md, and dynamic-sports-tracker.md to eliminate duplicate and test cards.
-- Improved summary overlay styling and card layout per user feedback.
-- Added debug logging to ProjectCardReact.jsx to verify project data and ensure correct field mapping.
-- Updated Astro content schema (`src/content/config.ts`) to include `isAnimated` as a boolean field.
+- **Synchronized Transition Fade Implemented:**
+    - Centralized transition logic in `OverlayManager.jsx`, adding `isTransitioning` state.
+    - Passed `isTransitioning` prop down through `ThreeCanvas` -> `SceneContent` -> `ProjectTransitionButton`/`LazySphereNavButton`.
+    - Implemented sphere fade-out in `SceneContent` using `useFrame` to animate `<PointMaterial>` opacity based on `isTransitioning`.
+    - Implemented button fade-out in `SphereNavButton` by conditionally applying the `.hiding` CSS class based on `isTransitioning`.
+    - Removed redundant transition state and logic from `ThreeCanvas.jsx`.
+- **Transition Animation Fixed:**
+    - Refactored `TransitionOverlay.jsx` to use DOM elements and CSS keyframe animations instead of vanilla Three.js. This resolved the "R3F: Div is not part of the THREE namespace!" and "WebGL Context Lost" errors.
+    - Refactored `ProjectTransitionButton.jsx` to remove local state and direct rendering of `MojsBurstOverlay`. It now only renders `SphereNavButton` and calls the `onTransition` prop.
+    - Confirmed `OverlayManager.jsx` correctly renders both `MojsBurstOverlay` and the refactored `TransitionOverlay` as siblings to `<ThreeCanvas />`.
+- **Sphere Interactivity Fixed:** Resolved issues preventing sphere drag/hold and bubble button hover/click interactions through adjustments to `z-index` and `pointer-events` on the canvas wrapper, hero section, and Drei `<Html>` components.
+- **Astro/React Integration Refactor:** Removed `ThreeScene.astro`, using `OverlayManager.jsx` to render `ThreeCanvas.jsx` directly.
+- **Duplicate Sphere Fixed:** Removed redundant `<ThreeScene />` include from `Hero.astro`.
 
 ## 3. Next Steps
 
-- Ensure all new project cards follow this dynamic, animated, and Astro-compatible pattern.
-- Update .clinerules and documentation to reflect these new standards.
-- Continue to monitor for any edge cases with image handling or field mapping as new cards are added.
+- **Fix Project Detail Thumbnails:** Identify why the `thumbnail` image is not rendering on `src/pages/projects/[slug].astro` and implement a fix.
+- **Address Font 404s:** Investigate and fix the 404 errors for the self-hosted font files (`inter` and `poppins`). Verify paths in `global.css` and file locations.
+- **Code Cleanup:** Remove any remaining console logs or commented-out code related to debugging.
+- **Testing:** Perform thorough testing of all interactions and transitions across different scenarios, including project detail pages.
+
+## 4. Known Issues
+
+- **Missing Thumbnails on Project Detail Pages:** Thumbnails defined in project frontmatter are not appearing on the dynamic project detail pages.
+- **404 errors for missing font files.**
+- Preload warnings for fonts not used within a few seconds (likely related to 404s).
