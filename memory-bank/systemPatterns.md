@@ -29,6 +29,14 @@
     *   Layout order: Title, Thumbnail, Tags/Links.
     *   Includes subtle "lift" hover effect on the card.
     *   Links styled as ghost buttons.
+    
+    *   **Modal Overlay (Projects Page):**
+        *   Clicking a project card in `ProjectCardReact.jsx` or `SampleAnimatedProjectCard.jsx` triggers `onOpenModal(e, project)`, passing the `project` data and the click `originRect`.
+        *   Renders `ProjectDetailModal.jsx` as a React island via `client:load`, using `createPortal` to mount to `document.body`.
+        *   Animates overlay fade-in/out and content scale+rotate using `Framer Motion` (`AnimatePresence` and `motion.div`), with `transformOrigin` calculated from click position via `useLayoutEffect`.
+        *   Applies a mo.js Burst effect on modal mount, dynamically imported to avoid SSR issues.
+        *   Locks body scroll and listens for Escape key to close the modal.
+        *   **NEW (2025-04-16):** Modal popups are now fully scrollable, with all content visually confined within the animated border. The scrollable area uses dynamic padding based on the border's strokeWidth, and FocusTrap is used for accessibility and keyboard navigation.
 *   **Sequential Reveal (Post-Hero):** If other sections exist on the homepage after the Hero, a custom JavaScript implementation (`index.astro`) orchestrates complex CSS keyframe animations (`spin-out`, `slide-bounce-in`) to transition between them upon other button clicks.
 *   **Progressive Enhancement:** Core content is accessible without JavaScript. ThreeJS effects and complex animations enhance the experience but are not critical for functionality.
 *   **Utility-First CSS:** Tailwind CSS is used for styling, promoting consistency and rapid development. Custom theme values are defined in `tailwind.config.mjs`.

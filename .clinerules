@@ -16,11 +16,11 @@ This file captures key patterns, workflows, and technical notes specific to this
 *   **Previewing New Content:**
     *   The Astro development server (`npm run dev`) usually picks up new `.md` files in the content collection automatically (or after a server restart).
     *   **IMPORTANT:** The Astro preview server (`npm run preview`) serves the *last static build*. To see newly added content collection items in the preview server, you **must** run `npm run build` first to generate an updated static site, then run `npm run preview`.
+
 ## Project Card Patterns
 
 *   **Modal Popup Implementation:** Clicking any project card now opens a detailed modal instead of navigating away.
-
-
+    *   **NEW (2025-04-16):** Modal popups are now fully scrollable, with all content visually confined within the animated border. The scrollable area uses dynamic padding based on the border's strokeWidth, and FocusTrap is used for accessibility and keyboard navigation.
 
 ## Documentation
 

@@ -19,6 +19,8 @@ links:
   repo: "https://github.com/knath2000/onlysports"
 isFeatured: false
 isAnimated: true
+gradient: "linear-gradient(135deg, #00eaff 0%, #00ff85 50%, #6f00ff 100%)"
+borderColor: "#00ff85"
 featureHighlights:
   - Game-inspired, visually rich UI
   - Real-time sports match tracking

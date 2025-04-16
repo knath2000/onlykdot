@@ -7,7 +7,7 @@ import React from 'react';
 import SampleAnimatedProjectCard from './SampleAnimatedProjectCard';
 export default function ProjectCardReact({ project, onOpenModal }) {
   const { slug, data } = project;
-  const { title, thumbnail, shortDesc, techStack = [], links = {} } = data;
+  const { title, thumbnail, shortDesc, techStack = [], links = {}, gradient, borderColor } = data;
 
   // DEBUG: Log project data to verify isAnimated and other fields
   if (typeof window !== "undefined") {
@@ -34,6 +34,8 @@ export default function ProjectCardReact({ project, onOpenModal }) {
                 : undefined)
         }
         links={data.links || {}}
+        gradient={gradient}
+        borderColor={borderColor}
         projectUrl={`/projects/${slug}`}
         onOpenModal={onOpenModal ? (e) => onOpenModal(e, project) : undefined}
       />

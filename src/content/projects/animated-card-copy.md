@@ -23,6 +23,8 @@ links:
   repo: "https://github.com/knath2000/flutter_quran"
 isFeatured: false
 isAnimated: true
+gradient: "linear-gradient(135deg, #ffe066 0%, #a259ff 50%, #ff6f91 100%)"
+borderColor: "#ffe066"
 featureHighlights:
   - Game-like, magical, and intuitive for children
   - Animated, colorful, and rewarding experience

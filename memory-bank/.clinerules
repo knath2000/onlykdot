@@ -35,7 +35,7 @@ This file captures key patterns, workflows, and technical notes specific to this
     *   **Multiple Animated Cards:** The system supports multiple animated cards, each with unique content and slugs, controlled by the `isAnimated` field.
     *   **No Duplicates:** Only one card per project should exist in the content collection.
 *   **Modal Popup Implementation:** Clicking any project card now opens a detailed modal instead of navigating away.
-
+    *   **NEW (2025-04-16):** Modal popups are now fully scrollable, with all content visually confined within the animated border. The scrollable area uses dynamic padding based on the border's strokeWidth, and FocusTrap is used for accessibility and keyboard navigation.
 
 ## Technical Notes
 
@@ -56,7 +56,7 @@ This file captures key patterns, workflows, and technical notes specific to this
         5.  In `SphereNavButton.jsx`, conditionally add a `.hiding` CSS class (which sets `opacity: 0` with a transition) to the button element when `isTransitioning` is `true`.
 *   **Astro/React Prop Passing:** Passing props to Astro islands (e.g., `onPageTransition` to `ThreeScene.astro`) can cause "InvalidComponentArgs" errors. Prefer managing all overlay state and triggers in the React root and only pass minimal props to Astro islands.
 *   **Error Handling:** All image and content fields must be validated for type (string vs. object) before use.
-*   **Accessibility:** All overlays and interactive elements should be accessible and keyboard-navigable.
+*   **Accessibility:** All overlays and interactive elements should be accessible and keyboard-navigable. FocusTrap is now used for modal popups to ensure robust keyboard navigation and focus management.
 *   **Schema Extension:** When adding new fields to project markdown, always update the schema in `src/content/config.ts` to ensure fields are available in the React components.
 
 ## Troubleshooting Patterns

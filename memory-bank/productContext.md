@@ -28,3 +28,4 @@ This website addresses the need for a modern, engaging, and high-performance onl
 *   **Project Filtering:** Ability to sort/filter projects on the main Projects page.
 *   **Responsive Design:** Adapts to different screen sizes (desktop-first focus).
 *   **Clear Navigation:** Easy access to different sections (Home, Projects, About, Contact).
+*   **Modal Overlay on Cards:** On the Projects page, clicking any project card opens a detailed modal overlay with project information (title, description, thumbnail, tech stack, links) using animated transitions (scale, rotate) and a burst effect.

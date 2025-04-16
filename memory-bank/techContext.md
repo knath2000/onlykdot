@@ -24,6 +24,7 @@
     *   CSS Animations/Transitions (via Tailwind utilities and custom CSS keyframes in `.astro` files or `global.css`)
     *   JavaScript Event Listeners (`animationend`, `click`) for orchestrating complex sequential animations (homepage sections after Hero).
     *   `@mojs/core`: Used for the interactive button burst animation on the Hero section. Installed via `--legacy-peer-deps` due to React 19 conflict with `react-spring`.
+    *   `framer-motion`: Used in `ProjectDetailModal.jsx` to animate modal overlay transitions.
 
 ## 3. Content Management
 

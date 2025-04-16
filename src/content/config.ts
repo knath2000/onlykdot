@@ -18,6 +18,8 @@ const projectsCollection = defineCollection({
     }).optional(),
     isFeatured: z.boolean().optional().default(false), // Optional flag for featured projects
     isAnimated: z.boolean().optional().default(false), // Optional flag for animated cards
+    gradient: z.string().optional(), // Custom gradient for animated project card
+    borderColor: z.string().optional(), // Custom border/glow color
     // Add any other fields you might need, e.g., client, role
   }),
 });

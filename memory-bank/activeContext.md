@@ -1,35 +1,32 @@
-# Active Context: Personal Portfolio Website (as of 2025-04-16 @ 8:01 AM)
+# Active Context: Personal Portfolio Website (as of 2025-04-16 @ 14:44)
 
 ## 1. Current Focus
 
-- **Project Detail Page Thumbnails:** Investigating and fixing the issue where project thumbnails are not displaying on the individual project detail pages (`/projects/[slug]`).
-- **Font Loading:** Addressing the 404 errors for self-hosted fonts.
+- **Modal Popup Scrollability & Border Confinement:** The modal popups for project details are now fully scrollable, with all content visually confined within the animated border. Accessibility and keyboard navigation have been enhanced.
+- **Accessibility:** Focus trapping and keyboard navigation in modals are now robust, using FocusTrap with clickOutsideDeactivates.
+- **UI Polish:** Padding for modal content is now dynamically calculated based on the animated border's strokeWidth, ensuring content never overlaps the border.
+- **Other Ongoing:** Project detail page thumbnails and font loading issues remain as secondary focuses.
 
 ## 2. Recent Changes
 
-- **Synchronized Transition Fade Implemented:**
-    - Centralized transition logic in `OverlayManager.jsx`, adding `isTransitioning` state.
-    - Passed `isTransitioning` prop down through `ThreeCanvas` -> `SceneContent` -> `ProjectTransitionButton`/`LazySphereNavButton`.
-    - Implemented sphere fade-out in `SceneContent` using `useFrame` to animate `<PointMaterial>` opacity based on `isTransitioning`.
-    - Implemented button fade-out in `SphereNavButton` by conditionally applying the `.hiding` CSS class based on `isTransitioning`.
-    - Removed redundant transition state and logic from `ThreeCanvas.jsx`.
-- **Transition Animation Fixed:**
-    - Refactored `TransitionOverlay.jsx` to use DOM elements and CSS keyframe animations instead of vanilla Three.js. This resolved the "R3F: Div is not part of the THREE namespace!" and "WebGL Context Lost" errors.
-    - Refactored `ProjectTransitionButton.jsx` to remove local state and direct rendering of `MojsBurstOverlay`. It now only renders `SphereNavButton` and calls the `onTransition` prop.
-    - Confirmed `OverlayManager.jsx` correctly renders both `MojsBurstOverlay` and the refactored `TransitionOverlay` as siblings to `<ThreeCanvas />`.
-- **Sphere Interactivity Fixed:** Resolved issues preventing sphere drag/hold and bubble button hover/click interactions through adjustments to `z-index` and `pointer-events` on the canvas wrapper, hero section, and Drei `<Html>` components.
-- **Astro/React Integration Refactor:** Removed `ThreeScene.astro`, using `OverlayManager.jsx` to render `ThreeCanvas.jsx` directly.
-- **Duplicate Sphere Fixed:** Removed redundant `<ThreeScene />` include from `Hero.astro`.
+- **Scrollable Modal Implementation:**
+    - Imported and wrapped the modal detail pane in FocusTrap (with clickOutsideDeactivates) to preserve keyboard navigation and focus trapping.
+    - Updated the inner modal container to use `overflow-hidden`, `max-h-[80vh]`, `max-w-sm`, `flex flex-col`, and rounded corners.
+    - Replaced fixed padding with `style={{ padding: calc(1.5rem + strokeWidth) }}` on the scrollable content container (`overflow-y-auto`, `max-h-full`), ensuring content is always inset from the animated border.
+    - Verified `AnimatedBorder` remains absolutely positioned (`inset-0`, `pointer-events-none`) and overlays correctly.
+    - Verified accessibility and keyboard navigation.
+- **Transition Fade, Overlay, and Sphere Interactivity:** No changes since last update.
+- **Astro/React Integration:** No changes since last update.
 
 ## 3. Next Steps
 
-- **Fix Project Detail Thumbnails:** Identify why the `thumbnail` image is not rendering on `src/pages/projects/[slug].astro` and implement a fix.
-- **Address Font 404s:** Investigate and fix the 404 errors for the self-hosted font files (`inter` and `poppins`). Verify paths in `global.css` and file locations.
-- **Code Cleanup:** Remove any remaining console logs or commented-out code related to debugging.
-- **Testing:** Perform thorough testing of all interactions and transitions across different scenarios, including project detail pages.
+- **Continue UI/UX Testing:** Test modal accessibility and scrollability on all supported devices and browsers.
+- **Monitor for Edge Cases:** Watch for any content overflow or border overlap issues with unusual content.
+- **Finalize Thumbnail and Font Fixes:** Complete fixes for project detail page thumbnails and font loading errors.
+- **Document Patterns:** Ensure new modal and border patterns are reflected in systemPatterns.md and .clinerules.
 
 ## 4. Known Issues
 
-- **Missing Thumbnails on Project Detail Pages:** Thumbnails defined in project frontmatter are not appearing on the dynamic project detail pages.
-- **404 errors for missing font files.**
-- Preload warnings for fonts not used within a few seconds (likely related to 404s).
+- **Project Detail Page Thumbnails:** Thumbnails defined in project frontmatter are not appearing on the dynamic project detail pages.
+- **Font Loading:** 404 errors for missing font files.
+- **Preload Warnings:** Fonts not used within a few seconds (likely related to 404s).

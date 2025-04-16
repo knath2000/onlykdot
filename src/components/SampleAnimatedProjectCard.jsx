@@ -11,38 +11,123 @@ export default function SampleAnimatedProjectCard({
   links = {},
   projectUrl,
   onOpenModal,
+  gradient,
+  borderColor,
+  slug,
 }) {
   const cardRef = useRef(null);
+  
+  const fallbackGradient = "linear-gradient(135deg, #ec4899 0%, #6366f1 50%, #facc15 100%)";
+  const appliedGradient = gradient || fallbackGradient;
+  const fallbackBorderColor = "#f472b6";
+  const appliedBorderColor = borderColor || fallbackBorderColor;
+  const boxShadowStyle = `0 0 20px ${appliedBorderColor}, 0 0 0 4px ${appliedBorderColor} inset`;
 
   // Burst animation on click (browser-only, dynamic import)
   const handleBurst = async (e) => {
-    // Prevent navigation if this is the anchor
     if (e && typeof e.preventDefault === "function") e.preventDefault();
     if (typeof window === "undefined") return;
     const mojs = (await import("@mojs/core")).default;
-    const burst = new mojs.Burst({
-      parent: cardRef.current,
-      radius:   { 0: 80 },
-      count:    12,
-      children: {
-        shape:        "polygon",
-        points:       6,
-        fill:         [ "#f472b6", "#818cf8", "#facc15", "#34d399", "#38bdf8" ],
-        degreeShift:  "stagger(0,-5)",
-        duration:     900,
-        easing:       "cubic.out"
+    switch (slug) {
+      case "animated-card-sports": {
+        const burst = new mojs.Burst({
+          parent: cardRef.current,
+          radius: { 0: 80 },
+          count: 12,
+          children: {
+            shape: "polygon",
+            points: 6,
+            fill: [ "#00eaff", "#00ff85", "#6f00ff" ],
+            degreeShift: "stagger(0,-5)",
+            duration: 900,
+            easing: "cubic.out"
+          }
+        });
+        burst.play();
+        break;
       }
-    });
-    burst.play();
+      case "sample-animated-card": {
+        const primary = new mojs.Burst({
+          parent: cardRef.current,
+          shape: "circle",
+          count: 18,
+          radius: { 0: 100 },
+          fill: [ "#00cfff", "#5f5fff", "#e0e0e0" ],
+          children: { duration: 1200, easing: "cubic.out", stroke: "#5f5fff", strokeWidth: 2 }
+        });
+        const secondary = new mojs.Burst({
+          parent: cardRef.current,
+          shape: "rect",
+          count: 8,
+          radius: { 0: 60 },
+          fill: "#e0e0e0",
+          delay: 200
+        });
+        primary.play();
+        setTimeout(() => secondary.play(), 200);
+        break;
+      }
+      case "animated-card-copy": {
+        const burst1 = new mojs.Burst({
+          parent: cardRef.current,
+          shape: "star",
+          points: 5,
+          count: 10,
+          radius: { 0: 120 },
+          degreeShift: "stagger(0,10)",
+          fill: [ "#ffe066", "#a259ff", "#ff6f91", "#34d399", "#38bdf8" ],
+          duration: 1000
+        });
+        const burst2 = new mojs.Burst({
+          parent: cardRef.current,
+          shape: "circle",
+          count: 16,
+          radius: { 0: 80 },
+          fill: "#fff",
+          delay: 200,
+          duration: 800
+        });
+        const burst3 = new mojs.Burst({
+          parent: cardRef.current,
+          shape: "polygon",
+          points: 7,
+          count: 7,
+          radius: { 0: 60 },
+          fill: "#a259ff",
+          delay: 400,
+          duration: 800
+        });
+        burst1.play();
+        setTimeout(() => burst2.play(), 200);
+        setTimeout(() => burst3.play(), 400);
+        break;
+      }
+      default: {
+        const defaultBurst = new mojs.Burst({
+          parent: cardRef.current,
+          radius: { 0: 80 },
+          count: 12,
+          children: {
+            shape: "polygon",
+            points: 6,
+            fill: [ "#f472b6", "#818cf8", "#facc15", "#34d399", "#38bdf8" ],
+            degreeShift: "stagger(0,-5)",
+            duration: 900,
+            easing: "cubic.out"
+          }
+        });
+        defaultBurst.play();
+      }
+    }
   };
 
   const CardContent = (
     <div
-      className="transition-transform duration-500 group-hover:rotate-y-6 group-hover:-rotate-x-3 group-hover:scale-105 group-active:scale-95
-        bg-gradient-to-br from-pink-500 via-indigo-500 to-yellow-400 shadow-2xl rounded-3xl p-8 flex flex-col items-center border-4 border-accent-blue/60
-        animate-pulse"
+      className="transition-transform duration-500 group-hover:rotate-y-6 group-hover:-rotate-x-3 group-hover:scale-105 group-active:scale-95 shadow-2xl rounded-3xl p-8 flex flex-col items-center border-4 animate-pulse"
       style={{
-        boxShadow: "0 0 40px 10px #818cf8, 0 0 0 4px #f472b6 inset"
+        background: appliedGradient,
+        borderColor: appliedBorderColor,
+        boxShadow: boxShadowStyle,
       }}
     >
       <h2 className="text-2xl font-bold text-white drop-shadow-glow mb-2 tracking-wide">
@@ -117,12 +202,7 @@ export default function SampleAnimatedProjectCard({
           </a>
         )}
       </div>
-      <button
-        className="mt-4 px-6 py-2 rounded-full bg-gradient-to-r from-accent-blue to-pink-400 text-white font-bold shadow-lg transition-all duration-300 hover:scale-110 hover:from-pink-400 hover:to-accent-blue focus:outline-none focus:ring-4 focus:ring-pink-300"
-        onClick={handleBurst}
-      >
-        See Animation
-      </button>
+      {/* See Animation button removed as per requirements */}
     </div>
   );
   if (onOpenModal) {
